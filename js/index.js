@@ -1,6 +1,6 @@
   game = {
-    enemies: [new Enemy(5, SPRITE.ENEMY)],
-    player: new Player(SPRITE.KNIGHT),
+    enemies: [new Enemy(5, 3, SPRITE.ENEMY)],
+    player: new Player(10, SPRITE.KNIGHT),
   };
   spritesheet = new Image()
   spritesheet.src = 'assets/spritesheet.png'
@@ -14,6 +14,19 @@
         ctx.fillStyle = 'orange';
         ctx.fillText(textOverlay, x * RULES.TILE_SIZE + 10, RULES.TILE_SIZE - 10, RULES.TILE_SIZE - 20);
       }
+  }
+
+  const fightEnemies = () => {
+    game.player.attack();
+    game.enemies.forEach(e => {
+      e.attack();
+    });
+  }
+
+  const checkGameEnd = () => {
+    if (game.player.hp < 0) {
+      window.alert('You lose');
+    }
   }
 
   function moveEnemies() {
@@ -30,13 +43,24 @@
 
   function spawnEnemy() {
     if (game.enemies.length < RULES.ENEMY_LIMIT) {
-      game.enemies.push(new Enemy(RULES.NUMBER_OF_TILES - 1));
+      game.enemies.push(new Enemy(RULES.NUMBER_OF_TILES - 1, 3, SPRITE.ENEMY));
     }
   }
 
   function drawBackground() {
     for (let i=0; i < RULES.NUMBER_OF_TILES; i++) {
       drawSprite(SPRITE.BACKGROUND, i);
+    }
+  }
+
+  let timer = 0;
+  const battleTick = () => {
+    timer++;
+    fightEnemies();
+    checkGameEnd();
+    moveEnemies();
+    if (timer % 5 === 0) {
+      spawnEnemy();
     }
   }
 
@@ -48,6 +72,5 @@
       drawEnemies();
   };
 
-  setInterval(spawnEnemy, 5000);
-  setInterval(moveEnemies, 1000);
+  setInterval(battleTick, 1000);
   setInterval(draw, 15);
