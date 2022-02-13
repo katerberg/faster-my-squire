@@ -4,11 +4,12 @@ class Player {
         this.hp = hp;
         this.sprite = sprite;
         this.attackDamage = 1;
+        this.range = 1;
     }
 
     attack() {
         game.enemies.forEach(e => {
-            if (e.x === this.x + 1) {
+            if (e.x <= this.x + this.range) {
                 e.takeDamage(this.attackDamage);
             }
         });
@@ -19,6 +20,6 @@ class Player {
     }
 
     draw() {
-      drawSprite(SPRITE.KNIGHT, this.x, this.hp);
+        drawSprite(SPRITE.KNIGHT, this.x, this.hp);
     }
 }
