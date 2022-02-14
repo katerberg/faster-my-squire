@@ -9,14 +9,7 @@ function setupCanvas() {
     RULES.INVENTORY_CELL_HEIGHT * RULES.INVENTORY_HEIGHT + RULES.INVENTORY_PADDING_SIZE * 2,
   );
   window.images.gear.onload = () => {
-    const gearWidth = 85/67 * RULES.EQUIPMENT_PANEL_SIZE;
-    window.ctx.drawImage(
-      window.images.gear,
-      window.canvas.width - gearWidth - RULES.EQUIPMENT_PANEL_PADDING_SIZE,
-      RULES.TILE_SIZE + RULES.EQUIPMENT_PANEL_PADDING_SIZE,
-      gearWidth,
-      RULES.EQUIPMENT_PANEL_SIZE,
-    );
+    drawGear();
   }
   window.ctx.imageSmoothingEnabled = false;
 
@@ -27,17 +20,53 @@ function setupCanvas() {
   window.canvas.onmouseup = handleMouseUp;
 }
 
-const handleMouseMove = (e) => {
-  if (isItemInsideInventory(e.layerX - dragging.offsetX, e.layerY - dragging.offsetY, dragging.item)) {
-    drawInventory([dragging.item]);
-    const drawX = e.layerX - dragging.offsetX;
-    const drawY = e.layerY - dragging.offsetY;
-    dragging.item.draw(drawX, drawY);
+const handleMouseDown = (e) => {
+  console.log(e)
+  if (isEventInsideInventory(e)) {
+    const item = getItem(e);
+    if (item) {
+      dragging = {
+        item,
+        offsetX: e.layerX - RULES.INVENTORY_PADDING_SIZE - item.xPosition * RULES.INVENTORY_CELL_WIDTH,
+        offsetY: e.layerY - RULES.INVENTORY_PADDING_SIZE - item.yPosition * RULES.INVENTORY_CELL_HEIGHT - RULES.TILE_SIZE,
+      };
+      window.canvas.onmousemove = handleMouseMove;
+    }
   }
 }
 
-const isCellInsideInventory = (x, y) => {
-  return x >= 0 && x < RULES.INVENTORY_WIDTH && y >= 0 && y < RULES.INVENTORY_HEIGHT;
+const handleMouseMove = (e) => {
+  const itemStartEvent = getEventFromCoordinates(e.layerX - dragging.offsetX, e.layerY - dragging.offsetY);
+  if (isItemInsideInventory(itemStartEvent.layerX, itemStartEvent.layerY, dragging.item)) {
+    drawInventory([dragging.item]);
+    const [xCell, yCell] = getCellIncorporatingOffset(e, dragging);
+    console.log('move', xCell);
+    window.ctx.fillStyle = 'green';
+    window.ctx.fillRect(
+      xCell * RULES.INVENTORY_CELL_WIDTH + RULES.INVENTORY_PADDING_SIZE,
+      yCell * RULES.INVENTORY_CELL_HEIGHT + RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE,
+      dragging.item.xSize * RULES.INVENTORY_CELL_WIDTH,
+      dragging.item.ySize * RULES.INVENTORY_CELL_HEIGHT,
+    );
+
+    dragging.item.draw(itemStartEvent.layerX, itemStartEvent.layerY);
+  }
+}
+
+const handleMouseUp = (e) => {
+  if (dragging) {
+    if (isEventInsideInventory(e)) {
+      if (isItemInsideInventory(e.layerX - dragging.offsetX, e.layerY - dragging.offsetY, dragging.item)) {
+        const [xCell, yCell] = getCellIncorporatingOffset(e, dragging);
+        console.log('up', xCell);
+        dragging.item.xPosition = xCell;
+        dragging.item.yPosition = yCell;
+      }
+      drawInventory();
+    }
+    dragging = null;
+  }
+  window.canvas.onmousemove = null;
 }
 
 const getEventFromCoordinates = (x, y) => {
@@ -69,6 +98,13 @@ const getCell = (e) => {
   return [xCell, yCell];
 }
 
+const getCellIncorporatingOffset = (e, dragging) => {
+  const [xMouse, yMouse] =  getCell(e);
+  const xCell = xMouse - Math.floor(dragging.offsetX / RULES.INVENTORY_CELL_WIDTH);
+  const yCell = yMouse - Math.floor(dragging.offsetY / RULES.INVENTORY_CELL_HEIGHT);
+  return [xCell, yCell];
+}
+
 const getItem = (e) => {
   const [xCell, yCell] = getCell(e);
   return window.game.inventory.find(item => {
@@ -77,37 +113,6 @@ const getItem = (e) => {
       yCell >= item.yPosition &&
       yCell < item.yPosition + item.ySize;
   });
-}
-
-const handleMouseDown = (e) => {
-  console.log(e)
-  if (isEventInsideInventory(e)) {
-    const item = getItem(e);
-    if (item) {
-      dragging = {
-        item,
-        offsetX: e.layerX - RULES.INVENTORY_PADDING_SIZE - item.xPosition * RULES.INVENTORY_CELL_WIDTH,
-        offsetY: e.layerY - RULES.INVENTORY_PADDING_SIZE - item.yPosition * RULES.INVENTORY_CELL_HEIGHT - RULES.TILE_SIZE,
-      };
-      window.canvas.onmousemove = handleMouseMove;
-    }
-  }
-}
-
-const handleMouseUp = (e) => {
-  if (dragging) {
-    console.log(e)
-    if (isEventInsideInventory(e)) {
-      if (isItemInsideInventory(e.layerX - dragging.offsetX, e.layerY - dragging.offsetY, dragging.item)) {
-        const [xCell, yCell] = getCell(e);
-        dragging.item.xPosition = xCell - Math.floor(dragging.offsetX / 32);
-        dragging.item.yPosition = yCell - Math.floor(dragging.offsetY / 32);
-      }
-      drawInventory();
-    }
-    dragging = null;
-  }
-  window.canvas.onmousemove = null;
 }
 
 const getInventoryLineColor = (index, max) => {
@@ -153,4 +158,20 @@ const drawInventory = (exclusionList) => {
   drawInventoryHorizontalLines();
   drawInventoryVerticalLines();
   window.game.inventory.forEach(i=> (exclusionList || []).includes(i) || i.draw());
+  drawGear();
+}
+
+const drawGearBackground = () => {
+    const gearWidth = 85/67 * RULES.EQUIPMENT_PANEL_SIZE;
+    window.ctx.drawImage(
+      window.images.gear,
+      window.canvas.width - gearWidth - RULES.EQUIPMENT_PANEL_PADDING_SIZE,
+      RULES.TILE_SIZE + RULES.EQUIPMENT_PANEL_PADDING_SIZE,
+      gearWidth,
+      RULES.EQUIPMENT_PANEL_SIZE,
+    );
+}
+
+const drawGear = () => {
+  drawGearBackground();
 }
