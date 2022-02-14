@@ -107,11 +107,13 @@ module.exports = {
     window: 'readonly',
     Enemy: 'readonly',
     Player: 'readonly',
+    Dagger: 'readonly',
     Item: 'readonly',
     drawSprite: 'readonly',
     setupCanvas: 'readonly',
     RULES: 'readonly',
     SPRITE: 'readonly',
+    SLOTS: 'readonly',
   },
   env: {
     browser: true,

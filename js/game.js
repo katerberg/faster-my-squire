@@ -11,24 +11,21 @@ function setupCanvas() {
       RULES.EQUIPMENT_PANEL_SIZE + RULES.EQUIPMENT_PANEL_PADDING_SIZE,
       RULES.INVENTORY_CELL_HEIGHT * RULES.INVENTORY_HEIGHT + RULES.INVENTORY_PADDING_SIZE * 2,
     );
-  window.images.gear.onload = () => {
-    drawGear();
-  };
+  window.images.gear.onload = () => drawGear();
+  window.images.dagger.onload = () => drawGear();
   window.ctx.imageSmoothingEnabled = false;
 
-  window.images.sword.onload = () => {
-    drawInventory();
-  };
-  window.images.dagger.onload = () => {
-    drawInventory();
-  };
+  window.images.broadsword.onload = () => drawInventory();
+  window.images.shortsword.onload = () => drawInventory();
+
   window.canvas.onmousedown = handleMouseDown;
   window.canvas.onmouseup = handleMouseUp;
 }
 
 const handleMouseDown = (e) => {
+  console.log(e);
   if (isEventInsideInventory(e)) {
-    const item = getItem(...getCell(e));
+    const item = getItemFromCell(...getCell(e));
     if (item) {
       dragging = {
         item,
@@ -64,6 +61,11 @@ const handleMouseMove = (e) => {
 
     dragging.item.draw(itemStartEvent.layerX, itemStartEvent.layerY);
     window.ctx.globalAlpha = 1;
+  } else if (isItemInsidePlayZone(itemStartEvent.layerX, itemStartEvent.layerY, dragging.item)) {
+    drawGear();
+    window.ctx.globalAlpha = 0.5;
+
+    window.ctx.globalAlpha = 1;
   }
 };
 
@@ -95,13 +97,25 @@ const getEventFromCoordinates = (x, y) => ({
 const isValidPosition = (xCell, yCell, item) => {
   for (let i = xCell; i < xCell + item.xSize; i++) {
     for (let j = yCell; j < yCell + item.ySize; j++) {
-      const itemAtSpot = getItem(i, j);
+      const itemAtSpot = getItemFromCell(i, j);
       if (itemAtSpot && itemAtSpot !== item) {
         return false;
       }
     }
   }
   return true;
+};
+
+const isItemInsidePlayZone = (x, y, item) => {
+  const xMax = x + item.xSize * RULES.INVENTORY_CELL_WIDTH;
+  const yMax = y + item.ySize * RULES.INVENTORY_CELL_HEIGHT;
+
+  return (
+    isEventInsidePlayArea(getEventFromCoordinates(x, y)) &&
+    isEventInsidePlayArea(getEventFromCoordinates(xMax, y)) &&
+    isEventInsidePlayArea(getEventFromCoordinates(x, yMax)) &&
+    isEventInsidePlayArea(getEventFromCoordinates(xMax, yMax))
+  );
 };
 
 const isItemInsideInventory = (x, y, item) => {
@@ -114,6 +128,14 @@ const isItemInsideInventory = (x, y, item) => {
     isEventInsideInventory(getEventFromCoordinates(xMax, yMax))
   );
 };
+
+const isEventInsidePlayArea = (e) =>
+  e.layerX > RULES.INVENTORY_PADDING_SIZE &&
+  e.layerX <
+    window.canvas.width - RULES.INVENTORY_PADDING_SIZE - RULES.EQUIPMENT_PANEL_PADDING_SIZE &&
+  e.layerY > RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE &&
+  e.layerY <
+    window.canvas.height - RULES.INVENTORY_PADDING_SIZE - RULES.EQUIPMENT_PANEL_PADDING_SIZE;
 
 const isEventInsideInventory = (e) =>
   e.layerX > RULES.INVENTORY_PADDING_SIZE &&
@@ -139,10 +161,11 @@ const getCellIncorporatingOffset = (e, dragging) => {
   return [xCell, yCell];
 };
 
-const getItem = (xCell, yCell) =>
+const getItemFromCell = (xCell, yCell) =>
   window.game.inventory.find(
     (item) =>
       item &&
+      !item.slot &&
       xCell >= item.xPosition &&
       xCell < item.xPosition + item.xSize &&
       yCell >= item.yPosition &&
@@ -211,4 +234,9 @@ const drawGearBackground = () => {
 
 const drawGear = () => {
   drawGearBackground();
+  window.game.inventory.forEach((i) => {
+    if (i.slot) {
+      i.draw();
+    }
+  });
 };

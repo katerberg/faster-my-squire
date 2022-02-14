@@ -1,7 +1,8 @@
 window.images = {
   spritesheet: new Image(),
   gear: new Image(),
-  sword: new Image(),
+  broadsword: new Image(),
+  shortsword: new Image(),
   dagger: new Image(),
 };
 
@@ -9,15 +10,17 @@ window.game = {
   enemies: [new Enemy(5, 3, SPRITE.ENEMY)],
   player: new Player(10, SPRITE.KNIGHT),
   inventory: [
-    new Item(2, 4, 0, 0, window.images.sword),
-    new Item(1, 2, 5, 5, window.images.dagger),
+    new Item(2, 3, null, null, window.images.broadsword, SLOTS.HAND_PRIMARY),
+    new Item(1, 2, 3, 0, window.images.shortsword),
+    new Item(1, 1, 0, 0, window.images.dagger),
   ],
 };
 
 window.images.spritesheet.src = 'assets/spritesheet.png';
 window.images.gear.src = 'assets/gear.png';
-window.images.sword.src = 'assets/sword.png';
-window.images.dagger.src = 'assets/dagger.png';
+window.images.shortsword.src = 'assets/shortsword.png';
+window.images.broadsword.src = 'assets/broadsword.png';
+window.images.dagger.src = 'assets/angle-dagger.png';
 
 setupCanvas();
 
