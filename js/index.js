@@ -15,7 +15,7 @@ setupCanvas();
 
 function drawSprite(sprite, x, textOverlay) {
   window.ctx.drawImage(images.spritesheet, sprite * 16, 0, 16, 16, x * RULES.TILE_SIZE, 0, RULES.TILE_SIZE, RULES.TILE_SIZE);
-  if (textOverlay) {
+  if (textOverlay !== undefined) {
     window.ctx.font = '64px serif';
     window.ctx.fillStyle = 'orange';
     window.ctx.fillText(textOverlay, x * RULES.TILE_SIZE + 10, RULES.TILE_SIZE - 10, RULES.TILE_SIZE - 20);
@@ -31,8 +31,9 @@ const fightEnemies = () => {
 
 const checkGameEnd = () => {
   if (window.game.player.hp <= 0) {
-    draw();
+    clearInterval(drawInterval);
     clearInterval(battleInterval);
+    drawSprite(SPRITE.KNIGHT, 1, 'X')
   }
 }
 
@@ -80,4 +81,4 @@ const draw = () => {
 };
 
 const battleInterval = setInterval(battleTick, 1000);
-setInterval(draw, 15);
+const drawInterval = setInterval(draw, 15);
