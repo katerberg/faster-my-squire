@@ -28,20 +28,32 @@ function setupCanvas() {
 }
 
 const handleMouseMove = (e) => {
-
+  if (isItemInsideInventory(e.layerX - dragging.offsetX, e.layerY - dragging.offsetY, dragging.item)) {
+    drawInventory([dragging.item]);
+    const drawX = e.layerX - dragging.offsetX;
+    const drawY = e.layerY - dragging.offsetY;
+    dragging.item.draw(drawX, drawY);
+  }
 }
 
 const isCellInsideInventory = (x, y) => {
   return x >= 0 && x < RULES.INVENTORY_WIDTH && y >= 0 && y < RULES.INVENTORY_HEIGHT;
 }
 
+const getEventFromCoordinates = (x, y) => {
+  return {
+    layerX: x,
+    layerY: y,
+  };
+}
+
 const isItemInsideInventory = (x, y, item) => {
-  const yMax = y + item.ySize - 1;
-  const xMax = x + item.xSize - 1;
-  return isCellInsideInventory(x, y) &&
-    isCellInsideInventory(xMax, y) && 
-    isCellInsideInventory(x, yMax) && 
-    isCellInsideInventory(xMax, yMax);
+  const xMax = x + (item.xSize) * RULES.INVENTORY_CELL_WIDTH;
+  const yMax = y + (item.ySize) * RULES.INVENTORY_CELL_HEIGHT;
+  return isEventInsideInventory(getEventFromCoordinates(x, y)) &&
+    isEventInsideInventory(getEventFromCoordinates(xMax, y)) && 
+    isEventInsideInventory(getEventFromCoordinates(x, yMax)) && 
+    isEventInsideInventory(getEventFromCoordinates(xMax, yMax));
 }
 
 const isEventInsideInventory = (e) => {
@@ -72,11 +84,10 @@ const handleMouseDown = (e) => {
   if (isEventInsideInventory(e)) {
     const item = getItem(e);
     if (item) {
-      const [selectedX, selectedY] = getCell(e);
       dragging = {
         item,
-        offsetX: selectedX - item.xPosition,
-        offsetY: selectedY - item.yPosition,
+        offsetX: e.layerX - RULES.INVENTORY_PADDING_SIZE - item.xPosition * RULES.INVENTORY_CELL_WIDTH,
+        offsetY: e.layerY - RULES.INVENTORY_PADDING_SIZE - item.yPosition * RULES.INVENTORY_CELL_HEIGHT - RULES.TILE_SIZE,
       };
       window.canvas.onmousemove = handleMouseMove;
     }
@@ -87,14 +98,10 @@ const handleMouseUp = (e) => {
   if (dragging) {
     console.log(e)
     if (isEventInsideInventory(e)) {
-      const [xCell, yCell] = getCell(e);
-      const newX = xCell - dragging.offsetX;
-      const newY = yCell - dragging.offsetY;
-      console.log(newX, newY);
-      if (isItemInsideInventory(newX, newY, dragging.item)) {
-        console.log('dropped inside')
-        dragging.item.xPosition = newX;
-        dragging.item.yPosition = newY;
+      if (isItemInsideInventory(e.layerX - dragging.offsetX, e.layerY - dragging.offsetY, dragging.item)) {
+        const [xCell, yCell] = getCell(e);
+        dragging.item.xPosition = xCell - Math.floor(dragging.offsetX / 32);
+        dragging.item.yPosition = yCell - Math.floor(dragging.offsetY / 32);
       }
       drawInventory();
     }
@@ -135,7 +142,7 @@ const drawInventoryVerticalLines = () => {
   }
 }
 
-const drawInventory = () => {
+const drawInventory = (exclusionList) => {
   window.ctx.clearRect(
     RULES.INVENTORY_PADDING_SIZE,
     RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE,
@@ -145,5 +152,5 @@ const drawInventory = () => {
   window.ctx.lineWidth = 1;
   drawInventoryHorizontalLines();
   drawInventoryVerticalLines();
-  window.game.inventory.forEach(i=>i.draw());
+  window.game.inventory.forEach(i=> (exclusionList || []).includes(i) || i.draw());
 }

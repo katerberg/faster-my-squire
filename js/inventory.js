@@ -7,10 +7,10 @@ class Item {
       this.sprite = sprite;
     }
 
-    draw() {
+    draw(overrideX, overrideY) {
       window.ctx.drawImage(this.sprite,
-        this.xPosition * RULES.INVENTORY_CELL_WIDTH + RULES.INVENTORY_PADDING_SIZE,
-        this.yPosition * RULES.INVENTORY_CELL_HEIGHT + RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE,
+        overrideX ? overrideX : this.xPosition * RULES.INVENTORY_CELL_WIDTH + RULES.INVENTORY_PADDING_SIZE,
+        overrideY ? overrideY : this.yPosition * RULES.INVENTORY_CELL_HEIGHT + RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE,
         this.xSize * RULES.INVENTORY_CELL_WIDTH,
         this.ySize * RULES.INVENTORY_CELL_HEIGHT,
       );
