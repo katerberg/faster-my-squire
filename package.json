@@ -1,8 +1,16 @@
 {
   "dependencies": {
-    "http-server": "^14.1.0"
+    "eslint": "^8.9.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-compat": "^4.0.2",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "http-server": "^14.1.0",
+    "prettier-eslint-cli": "^5.0.1"
   },
   "scripts": {
+    "lint": "eslint --ext .js js",
     "start:dev": "http-server ."
   }
 }
