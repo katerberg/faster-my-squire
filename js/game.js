@@ -26,7 +26,7 @@ function setupCanvas() {
 const handleMouseDown = (e) => {
   console.log(e)
   if (isEventInsideInventory(e)) {
-    const item = getItem(e);
+    const item = getItem(...getCell(e));
     if (item) {
       dragging = {
         item,
@@ -43,8 +43,7 @@ const handleMouseMove = (e) => {
   if (isItemInsideInventory(itemStartEvent.layerX, itemStartEvent.layerY, dragging.item)) {
     drawInventory([dragging.item]);
     const [xCell, yCell] = getCellIncorporatingOffset(e, dragging);
-    console.log('move', xCell);
-    window.ctx.fillStyle = 'green';
+    window.ctx.fillStyle = isValidPosition(xCell, yCell, dragging.item) ? 'green' : 'red';
     window.ctx.fillRect(
       xCell * RULES.INVENTORY_CELL_WIDTH + RULES.INVENTORY_PADDING_SIZE,
       yCell * RULES.INVENTORY_CELL_HEIGHT + RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE,
@@ -79,6 +78,18 @@ const getEventFromCoordinates = (x, y) => {
   };
 }
 
+const isValidPosition = (xCell, yCell, item) => {
+  for (let i = xCell; i < xCell + item.xSize; i++) {
+    for (let j = yCell; j < yCell + item.ySize; j++) {
+      const itemAtSpot = getItem(i, j);
+      if (itemAtSpot && itemAtSpot !== item) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
 const isItemInsideInventory = (x, y, item) => {
   const xMax = x + (item.xSize) * RULES.INVENTORY_CELL_WIDTH;
   const yMax = y + (item.ySize) * RULES.INVENTORY_CELL_HEIGHT;
@@ -108,8 +119,7 @@ const getCellIncorporatingOffset = (e, dragging) => {
   return [xCell, yCell];
 }
 
-const getItem = (e) => {
-  const [xCell, yCell] = getCell(e);
+const getItem = (xCell, yCell) => {
   return window.game.inventory.find(item => {
     return item && xCell >= item.xPosition &&
       xCell < item.xPosition + item.xSize &&
