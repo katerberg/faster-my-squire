@@ -31,6 +31,7 @@ const fightEnemies = () => {
 
 const checkGameEnd = () => {
   if (game.player.hp <= 0) {
+    draw();
     clearInterval(battleInterval);
   }
 }
