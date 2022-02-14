@@ -2,13 +2,19 @@ game = {
   enemies: [new Enemy(5, 3, SPRITE.ENEMY)],
   player: new Player(10, SPRITE.KNIGHT),
 };
-spritesheet = new Image()
-spritesheet.src = 'assets/spritesheet.png'
+
+images = {
+  spritesheet: new Image(),
+  gear: new Image(),
+}
+images.spritesheet.src = 'assets/spritesheet.png';
+images.gear.src = 'assets/gear.png';
 
 setupCanvas();
 
+
 function drawSprite(sprite, x, textOverlay) {
-  ctx.drawImage(spritesheet, sprite * 16, 0, 16, 16, x * RULES.TILE_SIZE, 0, RULES.TILE_SIZE, RULES.TILE_SIZE);
+  ctx.drawImage(images.spritesheet, sprite * 16, 0, 16, 16, x * RULES.TILE_SIZE, 0, RULES.TILE_SIZE, RULES.TILE_SIZE);
   if (textOverlay) {
     ctx.font = '64px serif';
     ctx.fillStyle = 'orange';
@@ -26,7 +32,6 @@ const fightEnemies = () => {
 const checkGameEnd = () => {
   if (game.player.hp <= 0) {
     clearInterval(battleInterval);
-    window.alert('You lose');
   }
 }
 
@@ -66,7 +71,7 @@ const battleTick = () => {
 }
 
 const draw = () => {
-  ctx.clearRect(0, 0, 1000, 1000);
+  ctx.clearRect(0, 0, RULES.TILE_SIZE * RULES.NUMBER_OF_TILES, RULES.TILE_SIZE);
 
   drawBackground();
   game.player.draw();
