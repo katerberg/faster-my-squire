@@ -125,8 +125,10 @@ const isEventInsideInventory = (e) =>
       RULES.TILE_SIZE;
 
 const getCell = (e) => {
-  const xCell = Math.floor((e.layerX - RULES.INVENTORY_PADDING_SIZE) / 32);
-  const yCell = Math.floor((e.layerY - RULES.INVENTORY_PADDING_SIZE - RULES.TILE_SIZE) / 32);
+  const xCell = Math.floor((e.layerX - RULES.INVENTORY_PADDING_SIZE) / RULES.INVENTORY_CELL_WIDTH);
+  const yCell = Math.floor(
+    (e.layerY - RULES.INVENTORY_PADDING_SIZE - RULES.TILE_SIZE) / RULES.INVENTORY_CELL_HEIGHT,
+  );
   return [xCell, yCell];
 };
 
@@ -166,7 +168,7 @@ const drawInventoryHorizontalLines = () => {
 
 const drawInventoryVerticalLines = () => {
   for (let i = 0; i <= RULES.INVENTORY_WIDTH; i++) {
-    const xPosition = RULES.INVENTORY_CELL_HEIGHT * i + RULES.INVENTORY_PADDING_SIZE;
+    const xPosition = RULES.INVENTORY_CELL_WIDTH * i + RULES.INVENTORY_PADDING_SIZE;
     window.ctx.strokeStyle = getInventoryLineColor(i, RULES.INVENTORY_WIDTH);
     window.ctx.beginPath();
     window.ctx.moveTo(xPosition, RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE);
