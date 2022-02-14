@@ -58,17 +58,14 @@ const handleMouseMove = (e) => {
 
 const handleMouseUp = (e) => {
   if (dragging) {
-    if (isEventInsideInventory(e)) {
-      if (isItemInsideInventory(e.layerX - dragging.offsetX, e.layerY - dragging.offsetY, dragging.item) &&
-       isValidPosition(...getCellIncorporatingOffset(e, dragging), dragging.item)
-       ) {
-    
-        const [xCell, yCell] = getCellIncorporatingOffset(e, dragging);
-        dragging.item.xPosition = xCell;
-        dragging.item.yPosition = yCell;
-      }
-      drawInventory();
+    if (isItemInsideInventory(e.layerX - dragging.offsetX, e.layerY - dragging.offsetY, dragging.item) &&
+      isValidPosition(...getCellIncorporatingOffset(e, dragging), dragging.item)
+      ) {
+      const [xCell, yCell] = getCellIncorporatingOffset(e, dragging);
+      dragging.item.xPosition = xCell;
+      dragging.item.yPosition = yCell;
     }
+    drawInventory();
     dragging = null;
   }
   window.canvas.onmousemove = null;
