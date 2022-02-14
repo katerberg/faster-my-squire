@@ -1,13 +1,15 @@
-window.game = {
-  enemies: [new Enemy(5, 3, SPRITE.ENEMY)],
-  player: new Player(10, SPRITE.KNIGHT),
-};
-
 window.images = {
   spritesheet: new Image(),
   gear: new Image(),
   sword: new Image(),
 }
+
+window.game = {
+  enemies: [new Enemy(5, 3, SPRITE.ENEMY)],
+  player: new Player(10, SPRITE.KNIGHT),
+  inventory: [new Item(3, 6, 0, 0, window.images.sword)],
+};
+
 window.images.spritesheet.src = 'assets/spritesheet.png';
 window.images.gear.src = 'assets/gear.png';
 window.images.sword.src = 'assets/sword.png';
