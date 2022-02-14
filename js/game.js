@@ -16,6 +16,9 @@ function setupCanvas() {
   window.images.sword.onload = () => {
     drawInventory();
   }
+  window.images.dagger.onload = () => {
+    drawInventory();
+  }
   window.canvas.onmousedown = handleMouseDown;
   window.canvas.onmouseup = handleMouseUp;
 }
