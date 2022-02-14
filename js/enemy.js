@@ -9,7 +9,7 @@ class Enemy {
 
     move() {
         const newPosition = this.x - 1;
-        if (newPosition === game.player.x || game.enemies.map(e => e.x).includes(newPosition)) {
+        if (newPosition === window.game.player.x || window.game.enemies.map(e => e.x).includes(newPosition)) {
             return;
         }
         this.x = newPosition;
@@ -18,13 +18,13 @@ class Enemy {
     takeDamage(amount) {
         this.hp -= amount;
         if (this.hp <= 0) {
-            game.enemies = game.enemies.filter(e => e !== this);
+            window.game.enemies = window.game.enemies.filter(e => e !== this);
         }
     }
 
     attack() {
-        if(game.player.x >= this.x - this.range) {
-            game.player.takeDamage(this.attackDamage);
+        if(window.game.player.x >= this.x - this.range) {
+            window.game.player.takeDamage(this.attackDamage);
         }
     }
 

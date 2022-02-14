@@ -8,7 +8,7 @@ class Player {
     }
 
     attack() {
-        game.enemies.forEach(e => {
+        window.game.enemies.forEach(e => {
             if (e.x <= this.x + this.range) {
                 e.takeDamage(this.attackDamage);
             }
