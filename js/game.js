@@ -56,4 +56,12 @@ const drawInventory = () => {
   window.ctx.lineWidth = 1;
   drawInventoryHorizontalLines();
   drawInventoryVerticalLines();
+
+  window.images.sword.onload = () => {
+    window.ctx.drawImage(
+      window.images.sword,
+      RULES.INVENTORY_PADDING_SIZE,
+      RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE,
+    );
+  }
 }

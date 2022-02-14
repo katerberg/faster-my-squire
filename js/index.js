@@ -6,9 +6,11 @@ window.game = {
 window.images = {
   spritesheet: new Image(),
   gear: new Image(),
+  sword: new Image(),
 }
 window.images.spritesheet.src = 'assets/spritesheet.png';
 window.images.gear.src = 'assets/gear.png';
+window.images.sword.src = 'assets/sword.png';
 
 setupCanvas();
 
@@ -74,7 +76,6 @@ const battleTick = () => {
 
 const draw = () => {
   window.ctx.clearRect(0, 0, RULES.TILE_SIZE * RULES.NUMBER_OF_TILES, RULES.TILE_SIZE);
-
   drawBackground();
   window.game.player.draw();
   drawEnemies();
