@@ -108,6 +108,8 @@ module.exports = {
     Enemy: 'readonly',
     Player: 'readonly',
     Dagger: 'readonly',
+    ShortSword: 'readonly',
+    BroadSword: 'readonly',
     Item: 'readonly',
     drawSprite: 'readonly',
     setupCanvas: 'readonly',

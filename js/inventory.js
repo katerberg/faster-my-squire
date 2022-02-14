@@ -49,6 +49,13 @@ class Dagger extends Item {
 /* eslint-disable-next-line no-unused-vars */
 class ShortSword extends Item {
   constructor(xPosition, yPosition, slot) {
-    super(1, 1, xPosition, yPosition, window.images.dagger, slot);
+    super(1, 2, xPosition, yPosition, window.images.shortsword, slot);
+  }
+}
+
+/* eslint-disable-next-line no-unused-vars */
+class BroadSword extends Item {
+  constructor(xPosition, yPosition, slot) {
+    super(2, 3, xPosition, yPosition, window.images.broadsword, slot);
   }
 }

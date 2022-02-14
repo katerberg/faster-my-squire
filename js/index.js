@@ -10,9 +10,9 @@ window.game = {
   enemies: [new Enemy(5, 3, SPRITE.ENEMY)],
   player: new Player(10, SPRITE.KNIGHT),
   inventory: [
-    new Item(2, 3, null, null, window.images.broadsword, SLOTS.HAND_PRIMARY),
-    new Item(1, 2, 3, 0, window.images.shortsword),
-    new Item(1, 1, 0, 0, window.images.dagger),
+    new BroadSword(null, null, SLOTS.HAND_PRIMARY),
+    new ShortSword(3, 0),
+    new Dagger(0, 0),
   ],
 };
 
