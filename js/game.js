@@ -24,7 +24,6 @@ function setupCanvas() {
 }
 
 const handleMouseDown = (e) => {
-  console.log(e)
   if (isEventInsideInventory(e)) {
     const item = getItem(...getCell(e));
     if (item) {
@@ -42,6 +41,7 @@ const handleMouseMove = (e) => {
   const itemStartEvent = getEventFromCoordinates(e.layerX - dragging.offsetX, e.layerY - dragging.offsetY);
   if (isItemInsideInventory(itemStartEvent.layerX, itemStartEvent.layerY, dragging.item)) {
     drawInventory([dragging.item]);
+    ctx.globalAlpha = 0.5;
     const [xCell, yCell] = getCellIncorporatingOffset(e, dragging);
     window.ctx.fillStyle = isValidPosition(xCell, yCell, dragging.item) ? 'green' : 'red';
     window.ctx.fillRect(
@@ -52,15 +52,18 @@ const handleMouseMove = (e) => {
     );
 
     dragging.item.draw(itemStartEvent.layerX, itemStartEvent.layerY);
+    ctx.globalAlpha = 1;
   }
 }
 
 const handleMouseUp = (e) => {
   if (dragging) {
     if (isEventInsideInventory(e)) {
-      if (isItemInsideInventory(e.layerX - dragging.offsetX, e.layerY - dragging.offsetY, dragging.item)) {
+      if (isItemInsideInventory(e.layerX - dragging.offsetX, e.layerY - dragging.offsetY, dragging.item) &&
+       isValidPosition(...getCellIncorporatingOffset(e, dragging), dragging.item)
+       ) {
+    
         const [xCell, yCell] = getCellIncorporatingOffset(e, dragging);
-        console.log('up', xCell);
         dragging.item.xPosition = xCell;
         dragging.item.yPosition = yCell;
       }
