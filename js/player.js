@@ -6,9 +6,6 @@ class Player {
     this.sprite = sprite;
     this.attackDamage = 1;
     this.range = 1;
-    this.gear = {
-      [SLOTS.HAND_PRIMARY]: new Dagger(null, null, SLOTS.HAND_PRIMARY),
-    };
   }
 
   attack() {
