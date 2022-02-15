@@ -3,9 +3,9 @@ let dragging = null;
 window.setupCanvas = () => {
   window.canvas = document.querySelector('canvas');
   window.ctx = window.canvas.getContext('2d');
-  window.canvas.width = RULES.TILE_SIZE * RULES.NUMBER_OF_TILES;
+  window.canvas.width = RULES.COMBAT_BAR_WIDTH;
   window.canvas.height =
-    RULES.TILE_SIZE +
+    RULES.COMBAT_BAR_HEIGHT +
     Math.max(
       RULES.EQUIPMENT_PANEL_SIZE + RULES.EQUIPMENT_PANEL_PADDING_SIZE * 2,
       RULES.INVENTORY_CELL_HEIGHT * RULES.INVENTORY_HEIGHT + RULES.INVENTORY_PADDING_SIZE * 2,
@@ -40,7 +40,7 @@ const handleMouseDown = (e) => {
         e.layerY -
         RULES.INVENTORY_PADDING_SIZE -
         item.yPosition * RULES.INVENTORY_CELL_HEIGHT -
-        RULES.TILE_SIZE,
+        RULES.COMBAT_BAR_HEIGHT,
     };
     window.canvas.onmousemove = handleMouseDrag;
   } else if (isEventInsidePlayArea(e)) {
@@ -112,7 +112,7 @@ const handleMouseDrag = (e) => {
     window.ctx.fillStyle = isValidPosition(xCell, yCell, dragging.item) ? 'green' : 'red';
     window.ctx.fillRect(
       xCell * RULES.INVENTORY_CELL_WIDTH + RULES.INVENTORY_PADDING_SIZE,
-      yCell * RULES.INVENTORY_CELL_HEIGHT + RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE,
+      yCell * RULES.INVENTORY_CELL_HEIGHT + RULES.INVENTORY_PADDING_SIZE + RULES.COMBAT_BAR_HEIGHT,
       dragging.item.xSize * RULES.INVENTORY_CELL_WIDTH,
       dragging.item.ySize * RULES.INVENTORY_CELL_HEIGHT,
     );
@@ -223,7 +223,7 @@ const isEventInsideInventory = (e) => {
     e.layerX < RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * RULES.INVENTORY_WIDTH &&
     e.layerY > yStart &&
     e.layerY <
-      RULES.TILE_SIZE +
+      RULES.COMBAT_BAR_HEIGHT +
         RULES.INVENTORY_PADDING_SIZE * 2 +
         RULES.INVENTORY_CELL_HEIGHT * RULES.INVENTORY_HEIGHT
   );
@@ -232,7 +232,8 @@ const isEventInsideInventory = (e) => {
 const getCell = (e) => {
   const xCell = Math.floor((e.layerX - RULES.INVENTORY_PADDING_SIZE) / RULES.INVENTORY_CELL_WIDTH);
   const yCell = Math.floor(
-    (e.layerY - RULES.INVENTORY_PADDING_SIZE - RULES.TILE_SIZE) / RULES.INVENTORY_CELL_HEIGHT,
+    (e.layerY - RULES.INVENTORY_PADDING_SIZE - RULES.COMBAT_BAR_HEIGHT) /
+      RULES.INVENTORY_CELL_HEIGHT,
   );
   return [xCell, yCell];
 };

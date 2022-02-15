@@ -7,16 +7,17 @@ window.images = {
   ring: new Image(),
 };
 
+const equippedWeapon = new BroadSword(null, null, SLOTS.HAND_PRIMARY);
 window.game = {
-  enemies: [new Enemy(5, 3, SPRITE.ENEMY)],
+  enemies: [new Enemy(70, 10, 3, SPRITE.ENEMY)],
   player: new Player(10, SPRITE.KNIGHT),
   inventory: new Inventory([
-    new BroadSword(null, null, SLOTS.HAND_PRIMARY),
+    equippedWeapon,
     new ShortSword(3, 0),
     new Dagger(0, 0),
     new Ring(5, 5),
   ]),
-  description: new Description(),
+  description: new Description(equippedWeapon),
 };
 
 window.images.spritesheet.src = 'assets/spritesheet.png';
@@ -35,31 +36,27 @@ function logWarning(message) {
 window.getDraggableBoundary = () => ({
   xStart: 0,
   xEnd: window.canvas.width,
-  yStart: RULES.TILE_SIZE,
-  yEnd: RULES.TILE_SIZE + RULES.EQUIPMENT_PANEL_PADDING_SIZE * 2 + RULES.EQUIPMENT_PANEL_SIZE,
+  yStart: RULES.COMBAT_BAR_HEIGHT,
+  yEnd:
+    RULES.COMBAT_BAR_HEIGHT + RULES.EQUIPMENT_PANEL_PADDING_SIZE * 2 + RULES.EQUIPMENT_PANEL_SIZE,
 });
 
-window.drawSprite = (sprite, x, textOverlay) => {
+window.drawSprite = (sprite, x, width, textOverlay) => {
   window.ctx.drawImage(
     window.images.spritesheet,
     sprite * 16,
     0,
     16,
     16,
-    x * RULES.TILE_SIZE,
+    x,
     0,
-    RULES.TILE_SIZE,
-    RULES.TILE_SIZE,
+    width,
+    RULES.COMBAT_BAR_HEIGHT,
   );
   if (textOverlay !== undefined) {
-    window.ctx.font = '64px serif';
+    window.ctx.font = '10px serif';
     window.ctx.fillStyle = 'orange';
-    window.ctx.fillText(
-      textOverlay,
-      x * RULES.TILE_SIZE + 10,
-      RULES.TILE_SIZE - 10,
-      RULES.TILE_SIZE - 20,
-    );
+    window.ctx.fillText(textOverlay, x, RULES.COMBAT_BAR_HEIGHT - 10, width);
   }
 };
 
@@ -74,7 +71,7 @@ const checkGameEnd = () => {
   if (window.game.player.hp <= 0) {
     clearInterval(drawInterval);
     clearInterval(battleInterval);
-    window.drawSprite(SPRITE.KNIGHT, 1, 'X');
+    window.game.player.draw();
   }
 };
 
@@ -92,13 +89,13 @@ const drawEnemies = () => {
 
 const spawnEnemy = () => {
   if (window.game.enemies.length < RULES.ENEMY_LIMIT) {
-    window.game.enemies.push(new Enemy(RULES.NUMBER_OF_TILES - 1, 3, SPRITE.ENEMY));
+    window.game.enemies.push(new Enemy(RULES.COMBAT_BAR_WIDTH - 1, 10, 3, SPRITE.ENEMY));
   }
 };
 
 const drawBackground = () => {
-  for (let i = 0; i < RULES.NUMBER_OF_TILES; i++) {
-    window.drawSprite(SPRITE.BACKGROUND, i);
+  for (let i = 0; i < RULES.COMBAT_BAR_WIDTH; i++) {
+    window.drawSprite(SPRITE.BACKGROUND, i, 1);
   }
 };
 
@@ -108,13 +105,13 @@ const battleTick = () => {
   fightEnemies();
   checkGameEnd();
   moveEnemies();
-  if (timer % 5 === 0) {
+  if (timer % 100 === 0) {
     spawnEnemy();
   }
 };
 
 const draw = () => {
-  window.ctx.clearRect(0, 0, RULES.TILE_SIZE * RULES.NUMBER_OF_TILES, RULES.TILE_SIZE);
+  window.ctx.clearRect(0, 0, RULES.COMBAT_BAR_WIDTH, RULES.COMBAT_BAR_HEIGHT);
   drawBackground();
   window.game.player.draw();
   drawEnemies();
@@ -122,5 +119,5 @@ const draw = () => {
 
 window.setupCanvas();
 
-const battleInterval = setInterval(battleTick, 100);
+const battleInterval = setInterval(battleTick, 10);
 const drawInterval = setInterval(draw, 15);

@@ -53,7 +53,7 @@ class Item {
           ? overrideY
           : this.yPosition * RULES.INVENTORY_CELL_HEIGHT +
               RULES.INVENTORY_PADDING_SIZE +
-              RULES.TILE_SIZE,
+              RULES.COMBAT_BAR_HEIGHT,
         this.xSize * RULES.INVENTORY_CELL_WIDTH,
         this.ySize * RULES.INVENTORY_CELL_HEIGHT,
       );

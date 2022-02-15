@@ -50,7 +50,7 @@ class Inventory {
     window.ctx.drawImage(
       window.images.gear,
       window.canvas.width - gearWidth - RULES.EQUIPMENT_PANEL_PADDING_SIZE,
-      RULES.TILE_SIZE + RULES.EQUIPMENT_PANEL_PADDING_SIZE,
+      RULES.COMBAT_BAR_HEIGHT + RULES.EQUIPMENT_PANEL_PADDING_SIZE,
       gearWidth,
       RULES.EQUIPMENT_PANEL_SIZE,
     );
@@ -81,7 +81,7 @@ class Inventory {
     window.ctx.fillRect(
       RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * (RULES.INVENTORY_WIDTH - 2),
       RULES.INVENTORY_PADDING_SIZE +
-        RULES.TILE_SIZE +
+        RULES.COMBAT_BAR_HEIGHT +
         (RULES.INVENTORY_HEIGHT - 3) * RULES.INVENTORY_CELL_HEIGHT,
       RULES.INVENTORY_CELL_WIDTH * 2,
       RULES.INVENTORY_CELL_HEIGHT * 3,
@@ -92,7 +92,7 @@ class Inventory {
       'Drop Zone',
       RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * (RULES.INVENTORY_WIDTH - 2),
       RULES.INVENTORY_PADDING_SIZE +
-        RULES.TILE_SIZE +
+        RULES.COMBAT_BAR_HEIGHT +
         RULES.INVENTORY_HEIGHT * RULES.INVENTORY_CELL_HEIGHT +
         16,
     );
@@ -102,7 +102,7 @@ class Inventory {
     window.ctx.fillStyle = '#7cc5be';
     window.ctx.fillRect(
       RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * (RULES.INVENTORY_WIDTH - 2),
-      RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE,
+      RULES.INVENTORY_PADDING_SIZE + RULES.COMBAT_BAR_HEIGHT,
       RULES.INVENTORY_CELL_WIDTH * 2,
       RULES.INVENTORY_CELL_HEIGHT * 3,
     );
@@ -111,14 +111,14 @@ class Inventory {
     window.ctx.fillText(
       'Pick-up Zone',
       RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * (RULES.INVENTORY_WIDTH - 2),
-      RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE - 4,
+      RULES.INVENTORY_PADDING_SIZE + RULES.COMBAT_BAR_HEIGHT - 4,
     );
   }
 
   drawInventoryHorizontalLines() {
     for (let i = 0; i <= RULES.INVENTORY_HEIGHT; i++) {
       const yPosition =
-        RULES.INVENTORY_CELL_HEIGHT * i + RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE;
+        RULES.INVENTORY_CELL_HEIGHT * i + RULES.INVENTORY_PADDING_SIZE + RULES.COMBAT_BAR_HEIGHT;
       window.ctx.strokeStyle = this.getInventoryLineColor(i, RULES.INVENTORY_HEIGHT, 'horizontal');
       window.ctx.beginPath();
       window.ctx.moveTo(RULES.INVENTORY_PADDING_SIZE, yPosition);
@@ -132,11 +132,11 @@ class Inventory {
     window.ctx.beginPath();
     window.ctx.moveTo(
       RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * (RULES.INVENTORY_WIDTH - 2),
-      RULES.INVENTORY_CELL_HEIGHT * 3 + RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE,
+      RULES.INVENTORY_CELL_HEIGHT * 3 + RULES.INVENTORY_PADDING_SIZE + RULES.COMBAT_BAR_HEIGHT,
     );
     window.ctx.lineTo(
       RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * RULES.INVENTORY_WIDTH,
-      RULES.INVENTORY_CELL_HEIGHT * 3 + RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE,
+      RULES.INVENTORY_CELL_HEIGHT * 3 + RULES.INVENTORY_PADDING_SIZE + RULES.COMBAT_BAR_HEIGHT,
     );
     window.ctx.stroke();
   }
@@ -146,12 +146,12 @@ class Inventory {
       const xPosition = RULES.INVENTORY_CELL_WIDTH * i + RULES.INVENTORY_PADDING_SIZE;
       window.ctx.strokeStyle = this.getInventoryLineColor(i, RULES.INVENTORY_WIDTH, 'vertical');
       window.ctx.beginPath();
-      window.ctx.moveTo(xPosition, RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE);
+      window.ctx.moveTo(xPosition, RULES.INVENTORY_PADDING_SIZE + RULES.COMBAT_BAR_HEIGHT);
       window.ctx.lineTo(
         xPosition,
         RULES.INVENTORY_PADDING_SIZE +
           RULES.INVENTORY_CELL_HEIGHT * RULES.INVENTORY_HEIGHT +
-          RULES.TILE_SIZE,
+          RULES.COMBAT_BAR_HEIGHT,
       );
       window.ctx.stroke();
     }
