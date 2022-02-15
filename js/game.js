@@ -62,8 +62,11 @@ const handleMouseMove = (e) => {
     dragging.item.draw(itemStartEvent.layerX, itemStartEvent.layerY);
     window.ctx.globalAlpha = 1;
   } else if (isItemInsidePlayZone(itemStartEvent.layerX, itemStartEvent.layerY, dragging.item)) {
+    drawInventory([dragging.item]);
     drawGear();
     window.ctx.globalAlpha = 0.5;
+
+    dragging.item.draw(itemStartEvent.layerX, itemStartEvent.layerY);
 
     window.ctx.globalAlpha = 1;
   }
@@ -222,6 +225,12 @@ const drawInventory = (exclusionList) => {
 };
 
 const drawGearBackground = () => {
+  window.ctx.clearRect(
+    RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_WIDTH * RULES.INVENTORY_CELL_WIDTH,
+    RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE,
+    window.canvas.width,
+    window.canvas.height,
+  );
   const gearWidth = (85 / 67) * RULES.EQUIPMENT_PANEL_SIZE;
   window.ctx.drawImage(
     window.images.gear,
