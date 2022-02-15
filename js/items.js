@@ -13,8 +13,14 @@ class Item {
     return [];
   }
 
+  equip(slot) {
+    this.xPosition = null;
+    this.xPosition = null;
+    this.slot = slot;
+  }
+
   draw(overrideX, overrideY) {
-    if (!this.slot) {
+    if (!this.slot || overrideX || overrideY) {
       window.ctx.drawImage(
         this.sprite,
         overrideX

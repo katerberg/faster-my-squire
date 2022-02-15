@@ -40,6 +40,21 @@ const handleMouseDown = (e) => {
       };
       window.canvas.onmousemove = handleMouseMove;
     }
+  } else if (isEventInsidePlayArea(e)) {
+    const slot = getSlotFromCoordinates(e.layerX, e.layerY);
+    if (!slot) {
+      return;
+    }
+    const item = window.game.inventory.getItemFromSlot(slot);
+    console.log('found item', slot, item);
+    if (item) {
+      dragging = {
+        item,
+        offsetX: e.layerX - slot.xStart,
+        offsetY: e.layerY - slot.yStart,
+      };
+      window.canvas.onmousemove = handleMouseMove;
+    }
   }
 };
 
@@ -83,8 +98,9 @@ const handleMouseUp = (e) => {
         dragging.item.yPosition = yCell;
       }
     } else if (isItemInsidePlayZone(x, y, dragging.item)) {
-      const slotPosition = getSlotFromCoordinates(x, y);
-      window.game.inventory.tryToEquipItem(dragging.item, SLOTS[slotPosition]);
+      const slot = getSlotFromCoordinates(x, y);
+      console.log(slot);
+      window.game.inventory.tryToEquipItem(dragging.item, slot);
     }
 
     window.game.inventory.draw();
@@ -94,24 +110,28 @@ const handleMouseUp = (e) => {
 };
 
 const isInsideSlot = (x, y, slot) => {
-  const fudgeHigh = 1.2;
-  const fudgeLow = 0.8;
+  const fudgeX = 0.2 * (slot.xEnd - slot.xStart);
+  const fudgeY = 0.2 * (slot.yEnd - slot.yStart);
   return (
-    slot.xStart * fudgeLow <= x &&
-    slot.xEnd * fudgeHigh >= x &&
-    slot.yStart * fudgeLow <= y &&
-    slot.yEnd * fudgeHigh >= y
+    slot.xStart - fudgeX <= x &&
+    slot.xEnd + fudgeX >= x &&
+    slot.yStart - fudgeY <= y &&
+    slot.yEnd + fudgeY >= y
   );
 };
 
-const getSlotFromCoordinates = (x, y) =>
-  Object.keys(SLOTS).find((key) => {
+const getSlotFromCoordinates = (x, y) => {
+  const foundKey = Object.keys(SLOTS).find((key) => {
     if (SLOTS[key].xStart) {
       if (isInsideSlot(x, y, SLOTS[key])) {
-        return key;
+        return true;
       }
     }
   });
+  if (foundKey) {
+    return SLOTS[foundKey];
+  }
+};
 
 const getEventFromCoordinates = (x, y) => ({
   layerX: x,

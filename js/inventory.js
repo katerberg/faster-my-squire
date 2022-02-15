@@ -12,6 +12,10 @@ class Inventory {
     return this.items.filter((i) => i.slot);
   }
 
+  getItemFromSlot(slot) {
+    return this.items.find((i) => i.slot === slot);
+  }
+
   tryToEquipItem(item, slot) {
     if (this.getEquippedItems().find((i) => i.slot === slot)) {
       return;
@@ -30,9 +34,7 @@ class Inventory {
       return;
     }
 
-    foundItem.positionX = null;
-    foundItem.positionY = null;
-    foundItem.slot = slot;
+    foundItem.equip(slot);
   }
 
   drawGearBackground() {
@@ -52,11 +54,14 @@ class Inventory {
     );
   }
 
-  drawGear() {
+  drawGear(exclusionList) {
     this.drawGearBackground();
-    window.game.inventory.getEquippedItems().forEach((i) => {
-      i.draw();
-    });
+    window.game.inventory
+      .getEquippedItems()
+      .filter((i) => !exclusionList.includes(i))
+      .forEach((i) => {
+        i.draw();
+      });
   }
 
   getInventoryLineColor(index, max) {
@@ -107,6 +112,6 @@ class Inventory {
     this.drawInventoryHorizontalLines();
     this.drawInventoryVerticalLines();
     this.getUnequippedItems().forEach((i) => exclusionList.includes(i) || i.draw());
-    this.drawGear();
+    this.drawGear(exclusionList);
   }
 }
