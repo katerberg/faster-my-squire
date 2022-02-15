@@ -178,15 +178,15 @@ const getCellIncorporatingOffset = (e, dragging) => {
 };
 
 const getItemFromCell = (xCell, yCell) =>
-  window.game.inventory.find(
-    (item) =>
-      item &&
-      !item.slot &&
-      xCell >= item.xPosition &&
-      xCell < item.xPosition + item.xSize &&
-      yCell >= item.yPosition &&
-      yCell < item.yPosition + item.ySize,
-  );
+  window.game.inventory
+    .getUnequippedItems()
+    .find(
+      (item) =>
+        xCell >= item.xPosition &&
+        xCell < item.xPosition + item.xSize &&
+        yCell >= item.yPosition &&
+        yCell < item.yPosition + item.ySize,
+    );
 
 const getInventoryLineColor = (index, max) => (index === max || index === 0 ? 'black' : 'grey');
 
@@ -221,7 +221,7 @@ const drawInventoryVerticalLines = () => {
   }
 };
 
-const drawInventory = (exclusionList) => {
+const drawInventory = (exclusionList = []) => {
   window.ctx.clearRect(
     RULES.INVENTORY_PADDING_SIZE,
     RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE,
@@ -233,7 +233,7 @@ const drawInventory = (exclusionList) => {
   window.ctx.lineWidth = 1;
   drawInventoryHorizontalLines();
   drawInventoryVerticalLines();
-  window.game.inventory.forEach((i) => (exclusionList || []).includes(i) || i.draw());
+  window.game.inventory.getUnequippedItems().forEach((i) => exclusionList.includes(i) || i.draw());
   drawGear();
 };
 
@@ -256,9 +256,7 @@ const drawGearBackground = () => {
 
 const drawGear = () => {
   drawGearBackground();
-  window.game.inventory.forEach((i) => {
-    if (i.slot) {
-      i.draw();
-    }
+  window.game.inventory.getEquippedItems().forEach((i) => {
+    i.draw();
   });
 };

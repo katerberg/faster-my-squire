@@ -9,11 +9,11 @@ window.images = {
 window.game = {
   enemies: [new Enemy(5, 3, SPRITE.ENEMY)],
   player: new Player(10, SPRITE.KNIGHT),
-  inventory: [
+  inventory: new Inventory([
     new BroadSword(null, null, SLOTS.HAND_PRIMARY),
     new ShortSword(3, 0),
     new Dagger(0, 0),
-  ],
+  ]),
 };
 
 window.images.spritesheet.src = 'assets/spritesheet.png';
@@ -23,6 +23,12 @@ window.images.broadsword.src = 'assets/broadsword.png';
 window.images.dagger.src = 'assets/angle-dagger.png';
 
 setupCanvas();
+
+// eslint-disable-next-line no-unused-vars
+function logWarning(message) {
+  // eslint-disable-next-line no-console
+  console.warn(message);
+}
 
 function drawSprite(sprite, x, textOverlay) {
   window.ctx.drawImage(
