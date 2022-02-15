@@ -108,7 +108,7 @@ const handleMouseUp = (e) => {
         dragging.item.unequip(xCell, yCell);
       }
     } else if (isItemInsidePlayZone(x, y, dragging.item)) {
-      const slot = getSlotFromCoordinates(x, y);
+      const slot = getSlotFromCoordinates(x + dragging.offsetX, y + dragging.offsetY);
       window.game.inventory.tryToEquipItem(dragging.item, slot);
     }
 
@@ -131,10 +131,9 @@ const isInsideSlot = (x, y, slot) => {
 
 const getSlotFromCoordinates = (x, y) => {
   const foundKey = Object.keys(SLOTS).find((key) => {
-    if (SLOTS[key].xStart) {
-      if (isInsideSlot(x, y, SLOTS[key])) {
-        return true;
-      }
+    if (isInsideSlot(x, y, SLOTS[key])) {
+      console.log(key);
+      return true;
     }
   });
   if (foundKey) {
