@@ -15,8 +15,14 @@ class Item {
 
   equip(slot) {
     this.xPosition = null;
-    this.xPosition = null;
+    this.yPosition = null;
     this.slot = slot;
+  }
+
+  unequip(x, y) {
+    this.xPosition = x;
+    this.yPosition = y;
+    this.slot = null;
   }
 
   draw(overrideX, overrideY) {

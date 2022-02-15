@@ -94,8 +94,7 @@ const handleMouseUp = (e) => {
     if (isItemInsideInventory(x, y, dragging.item)) {
       if (isValidPosition(...getCellIncorporatingOffset(e, dragging), dragging.item)) {
         const [xCell, yCell] = getCellIncorporatingOffset(e, dragging);
-        dragging.item.xPosition = xCell;
-        dragging.item.yPosition = yCell;
+        dragging.item.unequip(xCell, yCell);
       }
     } else if (isItemInsidePlayZone(x, y, dragging.item)) {
       const slot = getSlotFromCoordinates(x, y);
