@@ -7,7 +7,6 @@ class Player {
     this.attackDamage = 1;
     this.range = 1;
   }
-
   attack() {
     window.game.enemies.forEach((e) => {
       if (e.x <= this.x + this.range) {
@@ -19,7 +18,6 @@ class Player {
   takeDamage(amount) {
     this.hp -= amount;
   }
-
   draw() {
     drawSprite(SPRITE.KNIGHT, this.x, this.hp);
   }

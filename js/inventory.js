@@ -23,4 +23,79 @@ class Inventory {
     foundItem.positionY = null;
     foundItem.slot = slot;
   }
+
+  drawGearBackground() {
+    window.ctx.clearRect(
+      RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_WIDTH * RULES.INVENTORY_CELL_WIDTH,
+      RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE,
+      window.canvas.width,
+      window.canvas.height,
+    );
+    const gearWidth = (85 / 67) * RULES.EQUIPMENT_PANEL_SIZE;
+    window.ctx.drawImage(
+      window.images.gear,
+      window.canvas.width - gearWidth - RULES.EQUIPMENT_PANEL_PADDING_SIZE,
+      RULES.TILE_SIZE + RULES.EQUIPMENT_PANEL_PADDING_SIZE,
+      gearWidth,
+      RULES.EQUIPMENT_PANEL_SIZE,
+    );
+  }
+
+  drawGear() {
+    this.drawGearBackground();
+    window.game.inventory.getEquippedItems().forEach((i) => {
+      i.draw();
+    });
+  }
+
+  getInventoryLineColor(index, max) {
+    return index === max || index === 0 ? 'black' : 'grey';
+  }
+
+  drawInventoryHorizontalLines() {
+    for (let i = 0; i <= RULES.INVENTORY_HEIGHT; i++) {
+      const yPosition =
+        RULES.INVENTORY_CELL_HEIGHT * i + RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE;
+      window.ctx.strokeStyle = this.getInventoryLineColor(i, RULES.INVENTORY_HEIGHT);
+      window.ctx.beginPath();
+      window.ctx.moveTo(RULES.INVENTORY_PADDING_SIZE, yPosition);
+      window.ctx.lineTo(
+        RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * RULES.INVENTORY_WIDTH,
+        yPosition,
+      );
+      window.ctx.stroke();
+    }
+  }
+
+  drawInventoryVerticalLines() {
+    for (let i = 0; i <= RULES.INVENTORY_WIDTH; i++) {
+      const xPosition = RULES.INVENTORY_CELL_WIDTH * i + RULES.INVENTORY_PADDING_SIZE;
+      window.ctx.strokeStyle = this.getInventoryLineColor(i, RULES.INVENTORY_WIDTH);
+      window.ctx.beginPath();
+      window.ctx.moveTo(xPosition, RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE);
+      window.ctx.lineTo(
+        xPosition,
+        RULES.INVENTORY_PADDING_SIZE +
+          RULES.INVENTORY_CELL_HEIGHT * RULES.INVENTORY_HEIGHT +
+          RULES.TILE_SIZE,
+      );
+      window.ctx.stroke();
+    }
+  }
+
+  draw(exclusionList = []) {
+    window.ctx.clearRect(
+      RULES.INVENTORY_PADDING_SIZE,
+      RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE,
+      RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * RULES.INVENTORY_WIDTH,
+      RULES.INVENTORY_PADDING_SIZE +
+        RULES.INVENTORY_CELL_HEIGHT * RULES.INVENTORY_HEIGHT +
+        RULES.TILE_SIZE,
+    );
+    window.ctx.lineWidth = 1;
+    this.drawInventoryHorizontalLines();
+    this.drawInventoryVerticalLines();
+    this.getUnequippedItems().forEach((i) => exclusionList.includes(i) || i.draw());
+    this.drawGear();
+  }
 }

@@ -2,7 +2,7 @@
 module.exports = {
   extends: ['eslint:recommended', 'plugin:compat/recommended', 'plugin:prettier/recommended'],
   parserOptions: {
-    ecmaVersion: 2021,
+    ecmaVersion: 2022,
     sourceType: 'module',
     ecmaFeatures: {
       jsx: true,
