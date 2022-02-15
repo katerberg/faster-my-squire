@@ -8,11 +8,15 @@ class Player {
     this.range = 1;
   }
   attack() {
-    window.game.enemies.forEach((e) => {
-      if (e.x <= this.x + this.range) {
-        e.takeDamage(this.attackDamage);
-      }
-    });
+    const closestEnemy = window.game.enemies.find((e) => e.x <= this.x + this.range);
+    if (!closestEnemy) {
+      return;
+    }
+    const equippedWeapon = window.game.inventory.getItemFromSlot(SLOTS.HAND_PRIMARY);
+    if (equippedWeapon) {
+      return closestEnemy.takeDamage(equippedWeapon.damage());
+    }
+    closestEnemy.takeDamage(this.attackDamage);
   }
 
   takeDamage(amount) {

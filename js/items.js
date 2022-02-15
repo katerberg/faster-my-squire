@@ -25,6 +25,10 @@ class Item {
     this.slot = null;
   }
 
+  damage() {
+    return 1;
+  }
+
   draw(overrideX, overrideY) {
     if (!this.slot || overrideX || overrideY) {
       window.ctx.drawImage(
@@ -61,6 +65,10 @@ class Dagger extends Item {
     super(1, 1, xPosition, yPosition, window.images.dagger, slot);
   }
 
+  damage() {
+    return Math.ceil(Math.random() * 4);
+  }
+
   getValidSlots() {
     return [SLOTS.HAND_PRIMARY];
   }
@@ -72,6 +80,10 @@ class ShortSword extends Item {
     super(1, 2, xPosition, yPosition, window.images.shortsword, slot);
   }
 
+  damage() {
+    return Math.ceil(Math.random() * 4);
+  }
+
   getValidSlots() {
     return [SLOTS.HAND_PRIMARY];
   }
@@ -81,6 +93,10 @@ class ShortSword extends Item {
 class BroadSword extends Item {
   constructor(xPosition, yPosition, slot) {
     super(2, 3, xPosition, yPosition, window.images.broadsword, slot);
+  }
+
+  damage() {
+    return Math.ceil(Math.random() * 6) + Math.ceil(Math.random() * 6);
   }
 
   getValidSlots() {
