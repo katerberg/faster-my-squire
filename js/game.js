@@ -93,13 +93,21 @@ const handleMouseUp = (e) => {
   window.canvas.onmousemove = null;
 };
 
-const isInside = (x, y, slot) =>
-  slot.xStart <= x && slot.xEnd >= x && slot.yStart <= y && slot.yEnd >= y;
+const isInsideSlot = (x, y, slot) => {
+  const fudgeHigh = 1.2;
+  const fudgeLow = 0.8;
+  return (
+    slot.xStart * fudgeLow <= x &&
+    slot.xEnd * fudgeHigh >= x &&
+    slot.yStart * fudgeLow <= y &&
+    slot.yEnd * fudgeHigh >= y
+  );
+};
 
 const getSlotFromCoordinates = (x, y) =>
   Object.keys(SLOTS).find((key) => {
     if (SLOTS[key].xStart) {
-      if (isInside(x, y, SLOTS[key])) {
+      if (isInsideSlot(x, y, SLOTS[key])) {
         return key;
       }
     }
