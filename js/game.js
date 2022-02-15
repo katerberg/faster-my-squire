@@ -27,7 +27,6 @@ window.setupCanvas = () => {
 };
 
 const handleMouseDown = (e) => {
-  console.log(e);
   if (isEventInsideInventory(e)) {
     const item = getItemFromCell(...getCell(e));
     if (!item) {

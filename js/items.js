@@ -30,6 +30,7 @@ class Item {
   attack() {
     const result = this.generateDamage();
     this.damageHistory[result] = (this.damageHistory[result] || 0) + 1;
+    window.game.description.draw();
     return result;
   }
 

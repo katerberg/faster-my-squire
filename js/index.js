@@ -11,9 +11,9 @@ window.game = {
   enemies: [new Enemy(5, 3, SPRITE.ENEMY)],
   player: new Player(10, SPRITE.KNIGHT),
   inventory: new Inventory([
-    new BroadSword(0, 0),
+    new BroadSword(null, null, SLOTS.HAND_PRIMARY),
     new ShortSword(3, 0),
-    new Dagger(null, null, SLOTS.HAND_PRIMARY),
+    new Dagger(0, 0),
     new Ring(5, 5),
   ]),
   description: new Description(),
@@ -72,9 +72,7 @@ const fightEnemies = () => {
 
 const checkGameEnd = () => {
   if (window.game.player.hp <= 0) {
-    /* eslint-disable-next-line no-use-before-define */
     clearInterval(drawInterval);
-    /* eslint-disable-next-line no-use-before-define */
     clearInterval(battleInterval);
     window.drawSprite(SPRITE.KNIGHT, 1, 'X');
   }
@@ -124,5 +122,5 @@ const draw = () => {
 
 window.setupCanvas();
 
-const battleInterval = setInterval(battleTick, 1000);
+const battleInterval = setInterval(battleTick, 100);
 const drawInterval = setInterval(draw, 15);
