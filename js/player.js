@@ -7,6 +7,7 @@ class Player {
     this.attackDamage = 1;
     this.range = 1;
   }
+
   attack() {
     const closestEnemy = window.game.enemies.find((e) => e.x <= this.x + this.range);
     if (!closestEnemy) {

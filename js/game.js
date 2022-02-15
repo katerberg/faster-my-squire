@@ -38,7 +38,7 @@ const handleMouseDown = (e) => {
           item.yPosition * RULES.INVENTORY_CELL_HEIGHT -
           RULES.TILE_SIZE,
       };
-      window.canvas.onmousemove = handleMouseMove;
+      window.canvas.onmousemove = handleMouseDrag;
     }
   } else if (isEventInsidePlayArea(e)) {
     const slot = getSlotFromCoordinates(e.layerX, e.layerY);
@@ -46,19 +46,31 @@ const handleMouseDown = (e) => {
       return;
     }
     const item = window.game.inventory.getItemFromSlot(slot);
-    console.log('found item', slot, item);
     if (item) {
+      const offsetX =
+        e.layerX -
+        item.slot.xStart -
+        (item.slot.xEnd - item.slot.xStart) / 2 +
+        (item.xSize * RULES.INVENTORY_CELL_WIDTH) / 2;
+      const offsetY =
+        e.layerY -
+        item.slot.yStart -
+        (item.slot.yEnd - item.slot.yStart) / 2 +
+        (item.ySize * RULES.INVENTORY_CELL_WIDTH) / 2;
+
       dragging = {
         item,
-        offsetX: e.layerX - slot.xStart,
-        offsetY: e.layerY - slot.yStart,
+        offsetX,
+        offsetY,
       };
-      window.canvas.onmousemove = handleMouseMove;
+      window.canvas.onmousemove = handleMouseDrag;
     }
   }
 };
 
-const handleMouseMove = (e) => {
+const handleMouseMove = ({ layerX: x, layerY: y }) => {};
+
+const handleMouseDrag = (e) => {
   const itemStartEvent = getEventFromCoordinates(
     e.layerX - dragging.offsetX,
     e.layerY - dragging.offsetY,
@@ -98,14 +110,13 @@ const handleMouseUp = (e) => {
       }
     } else if (isItemInsidePlayZone(x, y, dragging.item)) {
       const slot = getSlotFromCoordinates(x, y);
-      console.log(slot);
       window.game.inventory.tryToEquipItem(dragging.item, slot);
     }
 
     window.game.inventory.draw();
     dragging = null;
   }
-  window.canvas.onmousemove = null;
+  window.canvas.onmousemove = handleMouseMove;
 };
 
 const isInsideSlot = (x, y, slot) => {
@@ -214,3 +225,5 @@ const getItemFromCell = (xCell, yCell) =>
         yCell >= item.yPosition &&
         yCell < item.yPosition + item.ySize,
     );
+
+setTimeout(() => (window.canvas.onmousemove = handleMouseMove), 100);
