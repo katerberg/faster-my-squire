@@ -12,8 +12,15 @@ class Inventory {
     return this.items.filter((i) => i.slot);
   }
 
+  tryToEquipItem(item, slot) {
+    if (this.getEquippedItems().find((i) => i.slot === slot)) {
+      return;
+    }
+    this.equipItem(item, slot);
+  }
+
   equipItem(item, slot) {
-    const foundItem = this.items.find(item);
+    const foundItem = this.getUnequippedItems().find(item);
     if (!foundItem) {
       logWarning('Did not find item to equip', item);
       return;

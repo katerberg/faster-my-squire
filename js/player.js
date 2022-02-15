@@ -18,6 +18,7 @@ class Player {
   takeDamage(amount) {
     this.hp -= amount;
   }
+
   draw() {
     drawSprite(SPRITE.KNIGHT, this.x, this.hp);
   }

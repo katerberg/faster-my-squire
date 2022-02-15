@@ -83,7 +83,7 @@ const handleMouseUp = (e) => {
       }
     } else if (isItemInsidePlayZone(x, y, dragging.item)) {
       const slotPosition = getSlotFromCoordinates(x, y);
-      console.log('slot! ', slotPosition);
+      window.game.inventory.tryToEquipItem(dragging.item, SLOTS[slotPosition]);
     }
 
     window.game.inventory.draw();
