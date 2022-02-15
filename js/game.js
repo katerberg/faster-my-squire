@@ -74,23 +74,36 @@ const handleMouseMove = (e) => {
 
 const handleMouseUp = (e) => {
   if (dragging) {
-    if (
-      isItemInsideInventory(
-        e.layerX - dragging.offsetX,
-        e.layerY - dragging.offsetY,
-        dragging.item,
-      ) &&
-      isValidPosition(...getCellIncorporatingOffset(e, dragging), dragging.item)
-    ) {
-      const [xCell, yCell] = getCellIncorporatingOffset(e, dragging);
-      dragging.item.xPosition = xCell;
-      dragging.item.yPosition = yCell;
+    const x = e.layerX - dragging.offsetX;
+    const y = e.layerY - dragging.offsetY;
+    if (isItemInsideInventory(x, y, dragging.item)) {
+      if (isValidPosition(...getCellIncorporatingOffset(e, dragging), dragging.item)) {
+        const [xCell, yCell] = getCellIncorporatingOffset(e, dragging);
+        dragging.item.xPosition = xCell;
+        dragging.item.yPosition = yCell;
+      }
+    } else if (isItemInsidePlayZone(x, y, dragging.item)) {
+      const slotPosition = getSlotFromCoordinates(x, y);
+      console.log('slot! ', slotPosition);
     }
+
     drawInventory();
     dragging = null;
   }
   window.canvas.onmousemove = null;
 };
+
+const isInside = (x, y, slot) =>
+  slot.xStart <= x && slot.xEnd >= x && slot.yStart <= y && slot.yEnd >= y;
+
+const getSlotFromCoordinates = (x, y) =>
+  Object.keys(SLOTS).find((key) => {
+    if (SLOTS[key].xStart) {
+      if (isInside(x, y, SLOTS[key])) {
+        return key;
+      }
+    }
+  });
 
 const getEventFromCoordinates = (x, y) => ({
   layerX: x,

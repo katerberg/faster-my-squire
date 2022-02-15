@@ -22,8 +22,10 @@ const RULES = {
 /* eslint-disable-next-line no-unused-vars */
 const SLOTS = {
   HAND_PRIMARY: {
-    x: 773,
-    y: 260,
+    xStart: 726,
+    xEnd: 827,
+    yStart: 160,
+    yEnd: 372,
   },
   HAND_SECONDARY: 1,
   HEAD: 2,

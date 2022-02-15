@@ -30,8 +30,8 @@ class Item {
       const drawSizeY = this.ySize * RULES.INVENTORY_CELL_HEIGHT;
       window.ctx.drawImage(
         this.sprite,
-        this.slot.x - drawSizeX / 2,
-        this.slot.y - drawSizeY / 2,
+        (this.slot.xEnd - this.slot.xStart) / 2 + this.slot.xStart - drawSizeX / 2,
+        (this.slot.yEnd - this.slot.yStart) / 2 + this.slot.yStart - drawSizeY / 2,
         drawSizeX,
         drawSizeY,
       );
