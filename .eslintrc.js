@@ -110,6 +110,7 @@ module.exports = {
     Dagger: 'readonly',
     ShortSword: 'readonly',
     BroadSword: 'readonly',
+    Ring: 'readonly',
     Item: 'readonly',
     Inventory: 'readonly',
     drawSprite: 'readonly',

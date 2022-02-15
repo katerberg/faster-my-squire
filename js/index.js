@@ -4,20 +4,23 @@ window.images = {
   broadsword: new Image(),
   shortsword: new Image(),
   dagger: new Image(),
+  ring: new Image(),
 };
 
 window.game = {
   enemies: [new Enemy(5, 3, SPRITE.ENEMY)],
   player: new Player(10, SPRITE.KNIGHT),
   inventory: new Inventory([
-    new BroadSword(null, null, SLOTS.HAND_PRIMARY),
+    new BroadSword(0, 6),
     new ShortSword(3, 0),
     new Dagger(0, 0),
+    new Ring(6, 6),
   ]),
 };
 
 window.images.spritesheet.src = 'assets/spritesheet.png';
 window.images.gear.src = 'assets/gear.png';
+window.images.ring.src = 'assets/ring.png';
 window.images.shortsword.src = 'assets/shortsword.png';
 window.images.broadsword.src = 'assets/broadsword.png';
 window.images.dagger.src = 'assets/angle-dagger.png';

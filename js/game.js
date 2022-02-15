@@ -13,6 +13,7 @@ function setupCanvas() {
     );
   window.images.gear.onload = () => window.game.inventory.draw();
   window.images.dagger.onload = () => window.game.inventory.draw();
+  window.images.ring.onload = () => window.game.inventory.draw();
   window.ctx.imageSmoothingEnabled = false;
 
   window.images.broadsword.onload = () => window.game.inventory.draw();

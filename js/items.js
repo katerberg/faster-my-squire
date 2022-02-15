@@ -9,6 +9,10 @@ class Item {
     this.slot = slot;
   }
 
+  getValidSlots() {
+    return [];
+  }
+
   draw(overrideX, overrideY) {
     if (!this.slot) {
       window.ctx.drawImage(
@@ -44,6 +48,10 @@ class Dagger extends Item {
   constructor(xPosition, yPosition, slot) {
     super(1, 1, xPosition, yPosition, window.images.dagger, slot);
   }
+
+  getValidSlots() {
+    return [SLOTS.HAND_PRIMARY];
+  }
 }
 
 /* eslint-disable-next-line no-unused-vars */
@@ -51,11 +59,30 @@ class ShortSword extends Item {
   constructor(xPosition, yPosition, slot) {
     super(1, 2, xPosition, yPosition, window.images.shortsword, slot);
   }
+
+  getValidSlots() {
+    return [SLOTS.HAND_PRIMARY];
+  }
 }
 
 /* eslint-disable-next-line no-unused-vars */
 class BroadSword extends Item {
   constructor(xPosition, yPosition, slot) {
     super(2, 3, xPosition, yPosition, window.images.broadsword, slot);
+  }
+
+  getValidSlots() {
+    return [SLOTS.HAND_PRIMARY];
+  }
+}
+
+/* eslint-disable-next-line no-unused-vars */
+class Ring extends Item {
+  constructor(xPosition, yPosition, slot) {
+    super(1, 1, xPosition, yPosition, window.images.ring, slot);
+  }
+
+  getValidSlots() {
+    return [SLOTS.RING_PRIMARY, SLOTS.RING_SECONDARY];
   }
 }

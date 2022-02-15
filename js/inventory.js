@@ -20,9 +20,13 @@ class Inventory {
   }
 
   equipItem(item, slot) {
-    const foundItem = this.getUnequippedItems().find(item);
+    const foundItem = this.getUnequippedItems().find((i) => i === item);
     if (!foundItem) {
       logWarning('Did not find item to equip', item);
+      return;
+    }
+
+    if (!foundItem.getValidSlots().includes(slot)) {
       return;
     }
 
