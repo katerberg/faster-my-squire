@@ -47,16 +47,15 @@ const handleMouseDown = (e) => {
     }
     const item = window.game.inventory.getItemFromSlot(slot);
     if (item) {
-      const offsetX =
-        e.layerX -
-        item.slot.xStart -
-        (item.slot.xEnd - item.slot.xStart) / 2 +
-        (item.xSize * RULES.INVENTORY_CELL_WIDTH) / 2;
-      const offsetY =
-        e.layerY -
-        item.slot.yStart -
-        (item.slot.yEnd - item.slot.yStart) / 2 +
-        (item.ySize * RULES.INVENTORY_CELL_WIDTH) / 2;
+      const itemHeight = item.ySize * RULES.INVENTORY_CELL_HEIGHT;
+      const itemWidth = item.xSize * RULES.INVENTORY_CELL_WIDTH;
+      const calculatedX =
+        e.layerX - item.slot.xStart - (item.slot.xEnd - item.slot.xStart) / 2 + itemWidth / 2;
+      const calculatedY =
+        e.layerY - item.slot.yStart - (item.slot.yEnd - item.slot.yStart) / 2 + itemHeight / 2;
+
+      const offsetY = calculatedY > itemHeight || calculatedY < 0 ? itemHeight / 2 : calculatedY;
+      const offsetX = calculatedX > itemWidth || calculatedX < 0 ? itemWidth / 2 : calculatedX;
 
       dragging = {
         item,
