@@ -38,12 +38,14 @@ class Inventory {
   }
 
   drawGearBackground() {
+    const { xEnd, yStart, yEnd } = window.getDraggableBoundary();
     window.ctx.clearRect(
       RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_WIDTH * RULES.INVENTORY_CELL_WIDTH,
-      RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE,
-      window.canvas.width,
-      window.canvas.height,
+      yStart,
+      xEnd,
+      yEnd,
     );
+
     const gearWidth = (85 / 67) * RULES.EQUIPMENT_PANEL_SIZE;
     window.ctx.drawImage(
       window.images.gear,
@@ -100,13 +102,12 @@ class Inventory {
   }
 
   draw(exclusionList = []) {
+    const { xStart, yStart, yEnd } = window.getDraggableBoundary();
     window.ctx.clearRect(
-      RULES.INVENTORY_PADDING_SIZE,
-      RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE,
+      xStart,
+      yStart,
       RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * RULES.INVENTORY_WIDTH,
-      RULES.INVENTORY_PADDING_SIZE +
-        RULES.INVENTORY_CELL_HEIGHT * RULES.INVENTORY_HEIGHT +
-        RULES.TILE_SIZE,
+      yEnd,
     );
     window.ctx.lineWidth = 1;
     this.drawInventoryHorizontalLines();

@@ -8,7 +8,7 @@ function setupCanvas() {
   window.canvas.height =
     RULES.TILE_SIZE +
     Math.max(
-      RULES.EQUIPMENT_PANEL_SIZE + RULES.EQUIPMENT_PANEL_PADDING_SIZE,
+      RULES.EQUIPMENT_PANEL_SIZE + RULES.EQUIPMENT_PANEL_PADDING_SIZE * 2,
       RULES.INVENTORY_CELL_HEIGHT * RULES.INVENTORY_HEIGHT + RULES.INVENTORY_PADDING_SIZE * 2,
     );
   window.images.gear.onload = () => window.game.inventory.draw();
@@ -67,7 +67,11 @@ const handleMouseDown = (e) => {
   }
 };
 
-const handleMouseMove = ({ layerX: x, layerY: y }) => {};
+const handleMouseMove = (e) => {
+  if (isEventInsidePlayArea(e)) {
+    const slot = getSlotFromCoordinates(e);
+  }
+};
 
 const handleMouseDrag = (e) => {
   const itemStartEvent = getEventFromCoordinates(
@@ -181,18 +185,23 @@ const isItemInsideInventory = (x, y, item) => {
   );
 };
 
-const isEventInsidePlayArea = (e) =>
-  e.layerX > RULES.INVENTORY_PADDING_SIZE &&
-  e.layerX <
-    window.canvas.width - RULES.INVENTORY_PADDING_SIZE - RULES.EQUIPMENT_PANEL_PADDING_SIZE &&
-  e.layerY > RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE &&
-  e.layerY < window.canvas.height;
+const isEventInsidePlayArea = (e) => {
+  const { xStart, xEnd, yStart, yEnd } = window.getDraggableBoundary();
+  return e.layerX > xStart && e.layerX < xEnd && e.layerY > yStart && e.layerY < yEnd;
+};
 
-const isEventInsideInventory = (e) =>
-  e.layerX > RULES.INVENTORY_PADDING_SIZE &&
-  e.layerX < RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * RULES.INVENTORY_WIDTH &&
-  e.layerY > RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE &&
-  e.layerY < window.canvas.height;
+const isEventInsideInventory = (e) => {
+  const { xStart, yStart } =window. getDraggableBoundary();
+  return (
+    e.layerX > xStart &&
+    e.layerX < RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * RULES.INVENTORY_WIDTH &&
+    e.layerY > yStart &&
+    e.layerY <
+      RULES.TILE_SIZE +
+        RULES.INVENTORY_PADDING_SIZE * 2 +
+        RULES.INVENTORY_CELL_HEIGHT * RULES.INVENTORY_HEIGHT
+  );
+};
 
 const getCell = (e) => {
   const xCell = Math.floor((e.layerX - RULES.INVENTORY_PADDING_SIZE) / RULES.INVENTORY_CELL_WIDTH);

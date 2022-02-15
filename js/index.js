@@ -33,6 +33,13 @@ function logWarning(message) {
   console.warn(message);
 }
 
+window.getDraggableBoundary = () => ({
+  xStart: 0,
+  xEnd: window.canvas.width,
+  yStart: RULES.TILE_SIZE,
+  yEnd: RULES.TILE_SIZE + RULES.EQUIPMENT_PANEL_PADDING_SIZE * 2 + RULES.EQUIPMENT_PANEL_SIZE,
+});
+
 function drawSprite(sprite, x, textOverlay) {
   window.ctx.drawImage(
     window.images.spritesheet,
