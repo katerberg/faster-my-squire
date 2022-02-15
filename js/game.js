@@ -71,14 +71,13 @@ const handleMouseDown = (e) => {
   }
 };
 
-const handleMouseMove = (e) => {
+const getHoveredItem = (e) => {
   if (isEventInsideInventory(e)) {
     const item = getItemFromCell(...getCell(e));
     if (!item) {
       return;
     }
-    window.game.description.setItem(item);
-    window.game.description.draw();
+    return item;
   } else if (isEventInsidePlayArea(e)) {
     const slot = getSlotFromCoordinates(e.layerX, e.layerY);
     if (!slot) {
@@ -88,9 +87,18 @@ const handleMouseMove = (e) => {
     if (!item) {
       return;
     }
-    window.game.description.setItem(item);
-    window.game.description.draw();
+    return item;
   }
+};
+
+const handleMouseMove = (e) => {
+  const item = getHoveredItem(e);
+  if (item) {
+    window.game.description.setItem(item);
+  } else {
+    window.game.description.unsetItem();
+  }
+  window.game.description.draw();
 };
 
 const handleMouseDrag = (e) => {

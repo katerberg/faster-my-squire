@@ -8,6 +8,10 @@ class Description {
     this.item = item;
   }
 
+  unsetItem() {
+    this.item = window.game.inventory.getItemFromSlot(SLOTS.HAND_PRIMARY);
+  }
+
   getBoundary() {
     const { xStart, yEnd } = window.getDraggableBoundary();
     return {
