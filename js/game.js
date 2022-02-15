@@ -187,17 +187,13 @@ const isEventInsidePlayArea = (e) =>
   e.layerX <
     window.canvas.width - RULES.INVENTORY_PADDING_SIZE - RULES.EQUIPMENT_PANEL_PADDING_SIZE &&
   e.layerY > RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE &&
-  e.layerY <
-    window.canvas.height - RULES.INVENTORY_PADDING_SIZE - RULES.EQUIPMENT_PANEL_PADDING_SIZE;
+  e.layerY < window.canvas.height;
 
 const isEventInsideInventory = (e) =>
   e.layerX > RULES.INVENTORY_PADDING_SIZE &&
   e.layerX < RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * RULES.INVENTORY_WIDTH &&
   e.layerY > RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE &&
-  e.layerY <
-    RULES.INVENTORY_PADDING_SIZE +
-      RULES.INVENTORY_CELL_HEIGHT * RULES.INVENTORY_HEIGHT +
-      RULES.TILE_SIZE;
+  e.layerY < window.canvas.height;
 
 const getCell = (e) => {
   const xCell = Math.floor((e.layerX - RULES.INVENTORY_PADDING_SIZE) / RULES.INVENTORY_CELL_WIDTH);
