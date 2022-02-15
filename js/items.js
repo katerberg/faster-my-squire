@@ -7,6 +7,7 @@ class Item {
     this.yPosition = yPosition;
     this.sprite = sprite;
     this.slot = slot;
+    this.damageHistory = {};
   }
 
   getValidSlots() {
@@ -25,8 +26,18 @@ class Item {
     this.slot = null;
   }
 
-  damage() {
+  attack() {
+    const result = this.generateDamage();
+    this.damageHistory[result] = (this.damageHistory[result] || 0) + 1;
+    return result;
+  }
+
+  generateDamage() {
     return 1;
+  }
+
+  getDamageHistory() {
+    return this.damageHistory;
   }
 
   draw(overrideX, overrideY) {
@@ -65,7 +76,7 @@ class Dagger extends Item {
     super(1, 1, xPosition, yPosition, window.images.dagger, slot);
   }
 
-  damage() {
+  generateDamage() {
     return Math.ceil(Math.random() * 4);
   }
 
@@ -80,7 +91,7 @@ class ShortSword extends Item {
     super(1, 2, xPosition, yPosition, window.images.shortsword, slot);
   }
 
-  damage() {
+  generateDamage() {
     return Math.ceil(Math.random() * 4);
   }
 
@@ -95,7 +106,7 @@ class BroadSword extends Item {
     super(2, 3, xPosition, yPosition, window.images.broadsword, slot);
   }
 
-  damage() {
+  generateDamage() {
     return Math.ceil(Math.random() * 6) + Math.ceil(Math.random() * 6);
   }
 

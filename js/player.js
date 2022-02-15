@@ -14,7 +14,7 @@ class Player {
     }
     const equippedWeapon = window.game.inventory.getItemFromSlot(SLOTS.HAND_PRIMARY);
     if (equippedWeapon) {
-      return closestEnemy.takeDamage(equippedWeapon.damage());
+      return closestEnemy.takeDamage(equippedWeapon.attack());
     }
     closestEnemy.takeDamage(this.attackDamage);
   }
