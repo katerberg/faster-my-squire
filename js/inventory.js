@@ -66,15 +66,60 @@ class Inventory {
       });
   }
 
-  getInventoryLineColor(index, max) {
-    return index === max || index === 0 ? 'black' : 'grey';
+  getInventoryLineColor(index, max, orientation) {
+    if (index === max || index === 0) {
+      return 'black';
+    }
+    if (index === max - 2 && orientation == 'vertical') {
+      return 'black';
+    }
+    return 'grey';
+  }
+
+  drawInventoryDropZone() {
+    window.ctx.fillStyle = '#f4e55b';
+    window.ctx.fillRect(
+      RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * (RULES.INVENTORY_WIDTH - 2),
+      RULES.INVENTORY_PADDING_SIZE +
+        RULES.TILE_SIZE +
+        (RULES.INVENTORY_HEIGHT - 3) * RULES.INVENTORY_CELL_HEIGHT,
+      RULES.INVENTORY_CELL_WIDTH * 2,
+      RULES.INVENTORY_CELL_HEIGHT * 3,
+    );
+    window.ctx.font = '16px serif';
+    window.ctx.fillStyle = 'black';
+    window.ctx.fillText(
+      'Drop Zone',
+      RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * (RULES.INVENTORY_WIDTH - 2),
+      RULES.INVENTORY_PADDING_SIZE +
+        RULES.TILE_SIZE +
+        RULES.INVENTORY_HEIGHT * RULES.INVENTORY_CELL_HEIGHT +
+        16,
+    );
+  }
+
+  drawInventoryPickupZone() {
+    window.ctx.fillStyle = '#7cc5be';
+    window.ctx.fillRect(
+      RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * (RULES.INVENTORY_WIDTH - 2),
+      RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE,
+      RULES.INVENTORY_CELL_WIDTH * 2,
+      RULES.INVENTORY_CELL_HEIGHT * 3,
+    );
+    window.ctx.font = '16px serif';
+    window.ctx.fillStyle = 'black';
+    window.ctx.fillText(
+      'Pick-up Zone',
+      RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * (RULES.INVENTORY_WIDTH - 2),
+      RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE - 4,
+    );
   }
 
   drawInventoryHorizontalLines() {
     for (let i = 0; i <= RULES.INVENTORY_HEIGHT; i++) {
       const yPosition =
         RULES.INVENTORY_CELL_HEIGHT * i + RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE;
-      window.ctx.strokeStyle = this.getInventoryLineColor(i, RULES.INVENTORY_HEIGHT);
+      window.ctx.strokeStyle = this.getInventoryLineColor(i, RULES.INVENTORY_HEIGHT, 'horizontal');
       window.ctx.beginPath();
       window.ctx.moveTo(RULES.INVENTORY_PADDING_SIZE, yPosition);
       window.ctx.lineTo(
@@ -83,12 +128,23 @@ class Inventory {
       );
       window.ctx.stroke();
     }
+    window.ctx.strokeStyle = 'black';
+    window.ctx.beginPath();
+    window.ctx.moveTo(
+      RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * (RULES.INVENTORY_WIDTH - 2),
+      RULES.INVENTORY_CELL_HEIGHT * 3 + RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE,
+    );
+    window.ctx.lineTo(
+      RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * RULES.INVENTORY_WIDTH,
+      RULES.INVENTORY_CELL_HEIGHT * 3 + RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE,
+    );
+    window.ctx.stroke();
   }
 
   drawInventoryVerticalLines() {
     for (let i = 0; i <= RULES.INVENTORY_WIDTH; i++) {
       const xPosition = RULES.INVENTORY_CELL_WIDTH * i + RULES.INVENTORY_PADDING_SIZE;
-      window.ctx.strokeStyle = this.getInventoryLineColor(i, RULES.INVENTORY_WIDTH);
+      window.ctx.strokeStyle = this.getInventoryLineColor(i, RULES.INVENTORY_WIDTH, 'vertical');
       window.ctx.beginPath();
       window.ctx.moveTo(xPosition, RULES.INVENTORY_PADDING_SIZE + RULES.TILE_SIZE);
       window.ctx.lineTo(
@@ -110,6 +166,8 @@ class Inventory {
       yEnd - yStart,
     );
     window.ctx.lineWidth = 1;
+    this.drawInventoryDropZone();
+    this.drawInventoryPickupZone();
     this.drawInventoryHorizontalLines();
     this.drawInventoryVerticalLines();
     this.getUnequippedItems().forEach((i) => exclusionList.includes(i) || i.draw());
