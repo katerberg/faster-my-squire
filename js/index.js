@@ -16,6 +16,7 @@ window.game = {
     new Dagger(null, null, SLOTS.HAND_PRIMARY),
     new Ring(5, 5),
   ]),
+  description: new Description(),
 };
 
 window.images.spritesheet.src = 'assets/spritesheet.png';
@@ -24,8 +25,6 @@ window.images.ring.src = 'assets/ring.png';
 window.images.shortsword.src = 'assets/shortsword.png';
 window.images.broadsword.src = 'assets/broadsword.png';
 window.images.dagger.src = 'assets/angle-dagger.png';
-
-setupCanvas();
 
 // eslint-disable-next-line no-unused-vars
 function logWarning(message) {
@@ -40,7 +39,7 @@ window.getDraggableBoundary = () => ({
   yEnd: RULES.TILE_SIZE + RULES.EQUIPMENT_PANEL_PADDING_SIZE * 2 + RULES.EQUIPMENT_PANEL_SIZE,
 });
 
-function drawSprite(sprite, x, textOverlay) {
+window.drawSprite = (sprite, x, textOverlay) => {
   window.ctx.drawImage(
     window.images.spritesheet,
     sprite * 16,
@@ -62,7 +61,7 @@ function drawSprite(sprite, x, textOverlay) {
       RULES.TILE_SIZE - 20,
     );
   }
-}
+};
 
 const fightEnemies = () => {
   window.game.player.attack();
@@ -77,7 +76,7 @@ const checkGameEnd = () => {
     clearInterval(drawInterval);
     /* eslint-disable-next-line no-use-before-define */
     clearInterval(battleInterval);
-    drawSprite(SPRITE.KNIGHT, 1, 'X');
+    window.drawSprite(SPRITE.KNIGHT, 1, 'X');
   }
 };
 
@@ -101,7 +100,7 @@ const spawnEnemy = () => {
 
 const drawBackground = () => {
   for (let i = 0; i < RULES.NUMBER_OF_TILES; i++) {
-    drawSprite(SPRITE.BACKGROUND, i);
+    window.drawSprite(SPRITE.BACKGROUND, i);
   }
 };
 
@@ -122,6 +121,8 @@ const draw = () => {
   window.game.player.draw();
   drawEnemies();
 };
+
+window.setupCanvas();
 
 const battleInterval = setInterval(battleTick, 1000);
 const drawInterval = setInterval(draw, 15);

@@ -25,6 +25,6 @@ class Player {
   }
 
   draw() {
-    drawSprite(SPRITE.KNIGHT, this.x, this.hp);
+    window.drawSprite(SPRITE.KNIGHT, this.x, this.hp);
   }
 }

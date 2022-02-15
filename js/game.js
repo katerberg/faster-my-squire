@@ -1,7 +1,6 @@
 let dragging = null;
 
-/* eslint-disable-next-line no-unused-vars */
-function setupCanvas() {
+window.setupCanvas = () => {
   window.canvas = document.querySelector('canvas');
   window.ctx = window.canvas.getContext('2d');
   window.canvas.width = RULES.TILE_SIZE * RULES.NUMBER_OF_TILES;
@@ -10,7 +9,9 @@ function setupCanvas() {
     Math.max(
       RULES.EQUIPMENT_PANEL_SIZE + RULES.EQUIPMENT_PANEL_PADDING_SIZE * 2,
       RULES.INVENTORY_CELL_HEIGHT * RULES.INVENTORY_HEIGHT + RULES.INVENTORY_PADDING_SIZE * 2,
-    );
+    ) +
+    RULES.ITEM_DESCRIPTION_HEIGHT +
+    RULES.ITEM_DESCRIPTION_PADDING * 2;
   window.images.gear.onload = () => window.game.inventory.draw();
   window.images.dagger.onload = () => window.game.inventory.draw();
   window.images.ring.onload = () => window.game.inventory.draw();
@@ -19,27 +20,30 @@ function setupCanvas() {
   window.images.broadsword.onload = () => window.game.inventory.draw();
   window.images.shortsword.onload = () => window.game.inventory.draw();
 
+  window.game.description.draw();
+
   window.canvas.onmousedown = handleMouseDown;
   window.canvas.onmouseup = handleMouseUp;
-}
+};
 
 const handleMouseDown = (e) => {
   console.log(e);
   if (isEventInsideInventory(e)) {
     const item = getItemFromCell(...getCell(e));
-    if (item) {
-      dragging = {
-        item,
-        offsetX:
-          e.layerX - RULES.INVENTORY_PADDING_SIZE - item.xPosition * RULES.INVENTORY_CELL_WIDTH,
-        offsetY:
-          e.layerY -
-          RULES.INVENTORY_PADDING_SIZE -
-          item.yPosition * RULES.INVENTORY_CELL_HEIGHT -
-          RULES.TILE_SIZE,
-      };
-      window.canvas.onmousemove = handleMouseDrag;
+    if (!item) {
+      return;
     }
+    dragging = {
+      item,
+      offsetX:
+        e.layerX - RULES.INVENTORY_PADDING_SIZE - item.xPosition * RULES.INVENTORY_CELL_WIDTH,
+      offsetY:
+        e.layerY -
+        RULES.INVENTORY_PADDING_SIZE -
+        item.yPosition * RULES.INVENTORY_CELL_HEIGHT -
+        RULES.TILE_SIZE,
+    };
+    window.canvas.onmousemove = handleMouseDrag;
   } else if (isEventInsidePlayArea(e)) {
     const slot = getSlotFromCoordinates(e.layerX, e.layerY);
     if (!slot) {
@@ -68,8 +72,24 @@ const handleMouseDown = (e) => {
 };
 
 const handleMouseMove = (e) => {
-  if (isEventInsidePlayArea(e)) {
-    const slot = getSlotFromCoordinates(e);
+  if (isEventInsideInventory(e)) {
+    const item = getItemFromCell(...getCell(e));
+    if (!item) {
+      return;
+    }
+    window.game.description.setItem(item);
+    window.game.description.draw();
+  } else if (isEventInsidePlayArea(e)) {
+    const slot = getSlotFromCoordinates(e.layerX, e.layerY);
+    if (!slot) {
+      return;
+    }
+    const item = window.game.inventory.getItemFromSlot(slot);
+    if (!item) {
+      return;
+    }
+    window.game.description.setItem(item);
+    window.game.description.draw();
   }
 };
 
@@ -136,7 +156,6 @@ const isInsideSlot = (x, y, slot) => {
 const getSlotFromCoordinates = (x, y) => {
   const foundKey = Object.keys(SLOTS).find((key) => {
     if (isInsideSlot(x, y, SLOTS[key])) {
-      console.log(key);
       return true;
     }
   });
@@ -191,7 +210,7 @@ const isEventInsidePlayArea = (e) => {
 };
 
 const isEventInsideInventory = (e) => {
-  const { xStart, yStart } =window. getDraggableBoundary();
+  const { xStart, yStart } = window.getDraggableBoundary();
   return (
     e.layerX > xStart &&
     e.layerX < RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * RULES.INVENTORY_WIDTH &&

@@ -33,6 +33,6 @@ class Enemy {
   }
 
   draw() {
-    drawSprite(this.sprite, this.x, this.hp > 0 ? `${this.hp}` : 'X');
+    window.drawSprite(this.sprite, this.x, this.hp > 0 ? `${this.hp}` : 'X');
   }
 }

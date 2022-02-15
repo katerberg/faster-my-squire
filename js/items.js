@@ -1,6 +1,7 @@
 /* eslint-disable-next-line no-unused-vars */
 class Item {
-  constructor(xSize, ySize, xPosition, yPosition, sprite, slot) {
+  constructor(name, xSize, ySize, xPosition, yPosition, sprite, slot) {
+    this.name = name;
     this.xSize = xSize;
     this.ySize = ySize;
     this.xPosition = xPosition;
@@ -73,7 +74,7 @@ class Item {
 /* eslint-disable-next-line no-unused-vars */
 class Dagger extends Item {
   constructor(xPosition, yPosition, slot) {
-    super(1, 1, xPosition, yPosition, window.images.dagger, slot);
+    super('Dagger', 1, 1, xPosition, yPosition, window.images.dagger, slot);
   }
 
   generateDamage() {
@@ -88,7 +89,7 @@ class Dagger extends Item {
 /* eslint-disable-next-line no-unused-vars */
 class ShortSword extends Item {
   constructor(xPosition, yPosition, slot) {
-    super(1, 2, xPosition, yPosition, window.images.shortsword, slot);
+    super('Short Sword', 1, 2, xPosition, yPosition, window.images.shortsword, slot);
   }
 
   generateDamage() {
@@ -103,7 +104,7 @@ class ShortSword extends Item {
 /* eslint-disable-next-line no-unused-vars */
 class BroadSword extends Item {
   constructor(xPosition, yPosition, slot) {
-    super(2, 3, xPosition, yPosition, window.images.broadsword, slot);
+    super('Broad Sword', 2, 3, xPosition, yPosition, window.images.broadsword, slot);
   }
 
   generateDamage() {
@@ -118,7 +119,7 @@ class BroadSword extends Item {
 /* eslint-disable-next-line no-unused-vars */
 class Ring extends Item {
   constructor(xPosition, yPosition, slot) {
-    super(1, 1, xPosition, yPosition, window.images.ring, slot);
+    super('Ring', 1, 1, xPosition, yPosition, window.images.ring, slot);
   }
 
   getValidSlots() {

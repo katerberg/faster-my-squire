@@ -42,8 +42,8 @@ class Inventory {
     window.ctx.clearRect(
       RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_WIDTH * RULES.INVENTORY_CELL_WIDTH,
       yStart,
-      xEnd,
-      yEnd,
+      xEnd - RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_WIDTH * RULES.INVENTORY_CELL_WIDTH,
+      yEnd - yStart,
     );
 
     const gearWidth = (85 / 67) * RULES.EQUIPMENT_PANEL_SIZE;
@@ -107,7 +107,7 @@ class Inventory {
       xStart,
       yStart,
       RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * RULES.INVENTORY_WIDTH,
-      yEnd,
+      yEnd - yStart,
     );
     window.ctx.lineWidth = 1;
     this.drawInventoryHorizontalLines();
