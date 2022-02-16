@@ -91,12 +91,7 @@ const spawnEnemies = (time) => {
   if (window.game.enemies.length < RULES.ENEMY_LIMIT) {
     lastSpawn = time;
     window.game.enemies.push(
-      new Enemy(
-        window.game.player.x + RULES.COMBAT_BAR_WIDTH - RULES.PLAYER_STARTING_POSITION,
-        30,
-        3,
-        SPRITE.GOBLIN,
-      ),
+      new Goblin(window.game.player.x + RULES.COMBAT_BAR_WIDTH - RULES.PLAYER_STARTING_POSITION),
     );
   }
 };

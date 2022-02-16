@@ -1,16 +1,17 @@
 /* eslint-disable-next-line no-unused-vars */
 class Enemy {
-  constructor(x, width, hp, sprite) {
+  constructor(x, width, hp, sprite, gold, attackDamage, attackSpeed, moveSpeed, range) {
     this.x = x;
     this.sprite = sprite;
     this.hp = hp;
     this.width = width;
-    this.range = 11;
+    this.range = range;
     this.lastAttack = 0;
-    this.attackDamage = 1;
-    this.attackSpeed = 1000;
+    this.attackDamage = attackDamage;
+    this.attackSpeed = attackSpeed;
     this.lastMove = 0;
-    this.moveSpeed = 10;
+    this.gold = gold;
+    this.moveSpeed = moveSpeed;
   }
 
   move(time) {
@@ -51,5 +52,12 @@ class Enemy {
       this.width,
       RULES.COMBAT_BAR_HEIGHT,
     );
+  }
+}
+
+/* eslint-disable-next-line no-unused-vars */
+class Goblin extends Enemy {
+  constructor(x) {
+    super(x, 30, 3, SPRITE.GOBLIN, 1, 1, 1000, 10, 1);
   }
 }

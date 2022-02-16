@@ -106,6 +106,7 @@ module.exports = {
     document: 'readonly',
     window: 'readonly',
     Enemy: 'readonly',
+    Goblin: 'readonly',
     Description: 'readonly',
     Player: 'readonly',
     Dagger: 'readonly',
