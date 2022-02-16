@@ -141,14 +141,16 @@ class Inventory {
     );
     window.ctx.font = '16px serif';
     window.ctx.fillStyle = 'black';
+    window.ctx.textAlign = 'center';
     window.ctx.fillText(
       'Drop Zone',
-      RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * (RULES.INVENTORY_WIDTH - 2),
+      RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * (RULES.INVENTORY_WIDTH - 1),
       RULES.INVENTORY_PADDING_SIZE +
         RULES.COMBAT_BAR_HEIGHT +
         RULES.INVENTORY_HEIGHT * RULES.INVENTORY_CELL_HEIGHT +
         16,
     );
+    window.ctx.textAlign = 'left';
   }
 
   drawInventoryHorizontalLines() {
