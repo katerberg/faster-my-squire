@@ -94,7 +94,7 @@ const spawnEnemies = (time) => {
         window.game.player.x + RULES.COMBAT_BAR_WIDTH - RULES.PLAYER_STARTING_POSITION,
         30,
         3,
-        SPRITE.ENEMY,
+        SPRITE.GOBLIN,
       ),
     );
   }

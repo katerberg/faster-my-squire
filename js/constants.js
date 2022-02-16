@@ -1,8 +1,8 @@
 /* eslint-disable-next-line no-unused-vars */
 const SPRITE = {
-  KNIGHT: { xStart: 0, xEnd: 16, yStart: 0, yEnd: 16 },
-  ENEMY: { xStart: 16, xEnd: 32, yStart: 0, yEnd: 16 },
-  BACKGROUND: { xStart: 32, xEnd: 64, yStart: 0, yEnd: 16 },
+  KNIGHT: { xStart: 0, xEnd: 10, yStart: 0, yEnd: 16 },
+  GOBLIN: { xStart: 10, xEnd: 17, yStart: 0, yEnd: 16 },
+  BACKGROUND: { xStart: 17, xEnd: 18, yStart: 0, yEnd: 16 },
 };
 
 /* eslint-disable-next-line no-unused-vars */
