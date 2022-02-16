@@ -10,7 +10,7 @@ class Enemy {
     this.attackDamage = 1;
     this.attackSpeed = 1000;
     this.lastMove = 0;
-    this.moveSpeed = 1000;
+    this.moveSpeed = 10;
   }
 
   move(time) {

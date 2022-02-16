@@ -79,7 +79,8 @@ class Description {
     this.drawDamageHistogramAxes();
     const numberOfDamages = Object.keys(history).length;
     const totalSpace = 200;
-    const padding = (numberOfDamages + 1) * 5;
+    const barPadding = 2;
+    const padding = (numberOfDamages + 1) * barPadding;
     const drawSpace = totalSpace - padding;
     const spacePerDamage = Math.floor(drawSpace / numberOfDamages);
     const highestValue = Math.max(...Object.keys(history).map((k) => history[k]));
@@ -88,7 +89,7 @@ class Description {
       .forEach((key, i) => {
         this.drawDamageBar(
           key,
-          5 * (i + 1) + spacePerDamage * i + this.getBoundary().xStart + 20,
+          barPadding * (i + 1) + spacePerDamage * i + this.getBoundary().xStart + 20,
           spacePerDamage,
           Math.floor((90 * history[key]) / highestValue),
         );

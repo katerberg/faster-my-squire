@@ -4,8 +4,8 @@ class Player {
     this.x = RULES.PLAYER_STARTING_POSITION;
     this.hp = hp;
     this.sprite = sprite;
-    this.range = 11;
-    this.width = 10;
+    this.width = RULES.PLAYER_WIDTH;
+    this.range = this.width + 1;
     this.lastAttack = 0;
     this.attackDamage = 1;
     this.attackSpeed = 1000;
@@ -50,7 +50,7 @@ class Player {
     window.drawSprite(
       SPRITE.KNIGHT,
       RULES.PLAYER_STARTING_POSITION,
-      10,
+      RULES.PLAYER_WIDTH,
       RULES.COMBAT_BAR_HEIGHT,
       this.hp,
     );
