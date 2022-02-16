@@ -3,6 +3,7 @@ window.images = {
   gear: new Image(),
   broadsword: new Image(),
   shortsword: new Image(),
+  longbow: new Image(),
   dagger: new Image(),
   ring: new Image(),
 };
@@ -11,9 +12,9 @@ const equippedWeapon = new Dagger(null, null, SLOTS.HAND_PRIMARY);
 window.game = {
   enemies: [new Goblin(190)],
   droppedGold: [new Gold(640, 1)],
-  droppedLoot: [new Treasure(340, [new BroadSword()])],
+  droppedLoot: [new Treasure(340, [])],
   player: new Player(10, SPRITE.KNIGHT),
-  inventory: new Inventory([equippedWeapon, new ShortSword(3, 0), new Ring(5, 5)]),
+  inventory: new Inventory([equippedWeapon, new Longbow(0, 0)]),
   description: new Description(equippedWeapon),
   dragging: null,
 };
@@ -21,6 +22,7 @@ window.game = {
 window.images.spritesheet.src = 'assets/spritesheet.png';
 window.images.gear.src = 'assets/gear.png';
 window.images.ring.src = 'assets/ring.png';
+window.images.longbow.src = 'assets/longbow.png';
 window.images.shortsword.src = 'assets/shortsword.png';
 window.images.broadsword.src = 'assets/broadsword.png';
 window.images.dagger.src = 'assets/angle-dagger.png';

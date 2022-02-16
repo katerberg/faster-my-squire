@@ -37,6 +37,14 @@ class Enemy {
     if (this.gold) {
       window.game.droppedGold.push(new Gold(this.x, this.gold));
     }
+    const loot = this.getRandomLoot();
+    if (loot.length) {
+      window.game.droppedLoot.push(new Treasure(this.x, loot));
+    }
+  }
+
+  getRandomLoot() {
+    return [];
   }
 
   attack(time) {
@@ -66,5 +74,22 @@ class Goblin extends Enemy {
   constructor(x) {
     const gold = Math.random() > 0.5 ? 1 : 0;
     super(x, 3, SPRITE.GOBLIN, gold, 1, 1000, 100, 1);
+  }
+
+  getRandomLoot() {
+    const seed = Math.random();
+    if (seed > 0.95) {
+      return [new BroadSword()];
+    }
+    if (seed > 0.7) {
+      return [new Ring()];
+    }
+    if (seed > 0.65) {
+      return [new ShortSword()];
+    }
+    if (seed > 0.55) {
+      return [new Dagger()];
+    }
+    return [];
   }
 }

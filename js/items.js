@@ -1,5 +1,5 @@
 class Item {
-  constructor(name, xSize, ySize, xPosition, yPosition, sprite, slot) {
+  constructor(name, xSize, ySize, xPosition, yPosition, sprite, slot, rangeModifier = 0) {
     this.name = name;
     this.xSize = xSize;
     this.ySize = ySize;
@@ -8,6 +8,7 @@ class Item {
     this.sprite = sprite;
     this.slot = slot;
     this.damageHistory = {};
+    this.rangeModifier = rangeModifier;
   }
 
   getValidSlots() {
@@ -32,8 +33,8 @@ class Item {
     }
   }
 
-  attack() {
-    const result = this.generateDamage();
+  attack(player, enemy) {
+    const result = this.generateDamage(player, enemy);
     this.damageHistory[result] = (this.damageHistory[result] || 0) + 1;
     window.game.description.draw();
     return result;
@@ -115,6 +116,25 @@ class BroadSword extends Item {
 
   generateDamage() {
     return Math.ceil(Math.random() * 6) + Math.ceil(Math.random() * 6);
+  }
+
+  getValidSlots() {
+    return [SLOTS.HAND_PRIMARY];
+  }
+}
+
+/* eslint-disable-next-line no-unused-vars */
+class Longbow extends Item {
+  constructor(xPosition, yPosition, slot) {
+    super('Long Bow', 2, 3, xPosition, yPosition, window.images.longbow, slot, 150);
+  }
+
+  generateDamage(player, enemy) {
+    const distance = enemy.x - player.x;
+    if (distance >= this.rangeModifier) {
+      return Math.ceil(Math.random() * 4) + 2;
+    }
+    return Math.ceil(Math.random() * 8);
   }
 
   getValidSlots() {

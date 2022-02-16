@@ -12,12 +12,9 @@ window.setupCanvas = () => {
     RULES.ITEM_DESCRIPTION_PADDING * 2;
   window.images.gear.onload = () => window.game.inventory.draw();
   window.images.dagger.onload = () => window.game.inventory.draw();
-  window.images.ring.onload = () => window.game.inventory.draw();
+  window.images.longbow.onload = () => window.game.inventory.draw();
+
   window.ctx.imageSmoothingEnabled = false;
-
-  window.images.broadsword.onload = () => window.game.inventory.draw();
-  window.images.shortsword.onload = () => window.game.inventory.draw();
-
   window.game.description.draw();
 
   window.canvas.onmousedown = handleMouseDown;

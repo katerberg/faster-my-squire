@@ -15,18 +15,24 @@ class Player {
     this.gold = 0;
   }
 
+  getAttackRange() {
+    const equippedItems = window.game.inventory.getEquippedItems();
+    const modifier = equippedItems.reduce((a, c) => c.rangeModifier + a, 0);
+    return this.attackRange + modifier;
+  }
+
   attack(time) {
     if (time - this.lastAttack < this.attackSpeed) {
       return;
     }
-    const closestEnemy = window.game.enemies.find((e) => e.x <= this.x + this.attackRange);
+    const closestEnemy = window.game.enemies.find((e) => e.x <= this.x + this.getAttackRange());
     if (!closestEnemy) {
       return;
     }
     this.lastAttack = time;
     const equippedWeapon = window.game.inventory.getItemFromSlot(SLOTS.HAND_PRIMARY);
     if (equippedWeapon) {
-      return closestEnemy.takeDamage(equippedWeapon.attack());
+      return closestEnemy.takeDamage(equippedWeapon.attack(this, closestEnemy));
     }
     closestEnemy.takeDamage(this.attackDamage);
   }
