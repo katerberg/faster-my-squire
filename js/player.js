@@ -38,9 +38,11 @@ class Player {
 
   loot(x) {
     const goldAtLocation = window.game.droppedGold.filter((g) => g.x === x);
-    window.game.droppedGold = window.game.droppedGold.filter((g) => g.x !== x);
-    this.gold += goldAtLocation.reduce((prev, current) => prev + current.gold, 0);
-    window.game.inventory.draw();
+    if (goldAtLocation.length) {
+      window.game.droppedGold = window.game.droppedGold.filter((g) => g.x !== x);
+      this.gold += goldAtLocation.reduce((prev, current) => prev + current.gold, 0);
+      window.game.inventory.draw();
+    }
   }
 
   move(time) {
