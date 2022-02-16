@@ -57,9 +57,11 @@ class Player {
     this.x = newPosition;
   }
 
-  draw() {
+  draw(time) {
+    const sprite =
+      time - this.lastAttack < this.attackSpeed ? SPRITE.KNIGHT_ATTACKING : SPRITE.KNIGHT;
     window.drawSprite(
-      SPRITE.KNIGHT,
+      sprite,
       RULES.PLAYER_STARTING_POSITION,
       RULES.PLAYER_WIDTH,
       RULES.COMBAT_BAR_HEIGHT,

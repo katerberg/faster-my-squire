@@ -119,10 +119,10 @@ const drawBackground = () => {
   window.ctx.imageSmoothingEnabled = false;
 };
 
-const draw = () => {
+const draw = (time) => {
   window.ctx.clearRect(0, 0, RULES.COMBAT_BAR_WIDTH, RULES.COMBAT_BAR_HEIGHT);
   drawBackground();
-  window.game.player.draw();
+  window.game.player.draw(time);
   drawEnemies();
   drawLoot();
 };
@@ -133,13 +133,13 @@ const move = (time) => {
 };
 
 const gameLoop = (timeStamp) => {
-  draw();
+  draw(timeStamp);
   move(timeStamp);
   fight(timeStamp);
   spawnEnemies(timeStamp);
 
   if (checkGameEnd()) {
-    window.game.player.draw();
+    window.game.player.draw(timeStamp);
     return;
   }
 
