@@ -16,6 +16,48 @@ class Inventory {
     return this.items.find((i) => i.slot === slot);
   }
 
+  getItemFromCell(xCell, yCell) {
+    return this.getUnequippedItems().find(
+      (item) =>
+        xCell >= item.xPosition &&
+        xCell < item.xPosition + item.xSize &&
+        yCell >= item.yPosition &&
+        yCell < item.yPosition + item.ySize,
+    );
+  }
+
+  isValidPosition(xCell, yCell, item = null) {
+    for (let i = xCell; i < xCell + item.xSize; i++) {
+      for (let j = yCell; j < yCell + item.ySize; j++) {
+        const itemAtSpot = this.getItemFromCell(i, j);
+        if (itemAtSpot && itemAtSpot !== item) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  getAvailableSpace(item) {
+    for (let i = 0; i <= RULES.INVENTORY_WIDTH - item.xSize; i++) {
+      for (let j = 0; j <= RULES.INVENTORY_HEIGHT - item.ySize; j++) {
+        if (this.isValidPosition(i, j, item)) {
+          return [i, j];
+        }
+      }
+    }
+    return null;
+  }
+
+  tryToPickup(item) {
+    const space = this.getAvailableSpace(item);
+    if (space) {
+      item.unequip(space[0], space[1]);
+      return true;
+    }
+    return false;
+  }
+
   tryToEquipItem(item, slot) {
     if (this.getEquippedItems().find((i) => i.slot === slot)) {
       return;

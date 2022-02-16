@@ -106,6 +106,7 @@ module.exports = {
     document: 'readonly',
     window: 'readonly',
     Gold: 'readonly',
+    Treasure: 'readonly',
     Goblin: 'readonly',
     Description: 'readonly',
     Player: 'readonly',

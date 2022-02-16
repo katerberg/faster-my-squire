@@ -41,6 +41,21 @@ class Player {
     if (goldAtLocation.length) {
       window.game.droppedGold = window.game.droppedGold.filter((g) => g.x !== x);
       this.gold += goldAtLocation.reduce((prev, current) => prev + current.gold, 0);
+    }
+    const lootAtLocation = window.game.droppedLoot.filter((l) => l.x === x);
+    if (lootAtLocation.length) {
+      lootAtLocation.forEach((l) =>
+        l.items.forEach((i) => {
+          const success = window.game.inventory.tryToPickup(i);
+          if (success) {
+            window.game.droppedLoot = window.game.droppedLoot.filter(
+              (droppedLoot) => l.id !== droppedLoot.id,
+            );
+          }
+        }),
+      );
+    }
+    if (goldAtLocation.length || lootAtLocation.length) {
       window.game.inventory.draw();
     }
   }

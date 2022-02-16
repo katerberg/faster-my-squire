@@ -18,12 +18,18 @@ class Item {
     this.xPosition = null;
     this.yPosition = null;
     this.slot = slot;
+    if (!window.game.inventory.items.find((i) => i === this)) {
+      window.game.inventory.items.push(this);
+    }
   }
 
   unequip(x, y) {
     this.xPosition = x;
     this.yPosition = y;
     this.slot = null;
+    if (!window.game.inventory.items.find((i) => i === this)) {
+      window.game.inventory.items.push(this);
+    }
   }
 
   attack() {

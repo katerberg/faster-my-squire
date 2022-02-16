@@ -26,7 +26,7 @@ window.setupCanvas = () => {
 
 const handleMouseDown = (e) => {
   if (isEventInsideInventory(e)) {
-    const item = getItemFromCell(...getCell(e));
+    const item = window.game.inventory.getItemFromCell(...getCell(e));
     if (!item) {
       return;
     }
@@ -70,7 +70,7 @@ const handleMouseDown = (e) => {
 
 const getHoveredItem = (e) => {
   if (isEventInsideInventory(e)) {
-    const item = getItemFromCell(...getCell(e));
+    const item = window.game.inventory.getItemFromCell(...getCell(e));
     if (!item) {
       return;
     }
@@ -109,7 +109,11 @@ const handleMouseDrag = (e) => {
     window.game.inventory.draw();
     window.ctx.globalAlpha = 0.5;
     const [xCell, yCell] = getCellIncorporatingOffset(e, window.game.dragging);
-    window.ctx.fillStyle = isValidPosition(xCell, yCell, window.game.dragging.item)
+    window.ctx.fillStyle = window.game.inventory.isValidPosition(
+      xCell,
+      yCell,
+      window.game.dragging.item,
+    )
       ? 'green'
       : 'red';
     window.ctx.fillRect(
@@ -139,7 +143,7 @@ const handleMouseUp = (e) => {
     const y = e.layerY - window.game.dragging.offsetY;
     if (isItemInsideInventory(x, y, window.game.dragging.item)) {
       if (
-        isValidPosition(
+        window.game.inventory.isValidPosition(
           ...getCellIncorporatingOffset(e, window.game.dragging),
           window.game.dragging.item,
         )
@@ -187,18 +191,6 @@ const getEventFromCoordinates = (x, y) => ({
   layerX: x,
   layerY: y,
 });
-
-const isValidPosition = (xCell, yCell, item) => {
-  for (let i = xCell; i < xCell + item.xSize; i++) {
-    for (let j = yCell; j < yCell + item.ySize; j++) {
-      const itemAtSpot = getItemFromCell(i, j);
-      if (itemAtSpot && itemAtSpot !== item) {
-        return false;
-      }
-    }
-  }
-  return true;
-};
 
 const isItemInsidePlayZone = (x, y, item) => {
   const xMax = x + item.xSize * RULES.INVENTORY_CELL_WIDTH;
@@ -256,16 +248,5 @@ const getCellIncorporatingOffset = (e, dragging) => {
   const yCell = yMouse - Math.floor(dragging.offsetY / RULES.INVENTORY_CELL_HEIGHT);
   return [xCell, yCell];
 };
-
-const getItemFromCell = (xCell, yCell) =>
-  window.game.inventory
-    .getUnequippedItems()
-    .find(
-      (item) =>
-        xCell >= item.xPosition &&
-        xCell < item.xPosition + item.xSize &&
-        yCell >= item.yPosition &&
-        yCell < item.yPosition + item.ySize,
-    );
 
 setTimeout(() => (window.canvas.onmousemove = handleMouseMove), 100);

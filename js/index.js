@@ -7,17 +7,13 @@ window.images = {
   ring: new Image(),
 };
 
-const equippedWeapon = new BroadSword(null, null, SLOTS.HAND_PRIMARY);
+const equippedWeapon = new Dagger(null, null, SLOTS.HAND_PRIMARY);
 window.game = {
   enemies: [new Goblin(190)],
-  droppedGold: [new Gold(300, 1)],
+  droppedGold: [new Gold(640, 1)],
+  droppedLoot: [new Treasure(340, [new BroadSword()])],
   player: new Player(10, SPRITE.KNIGHT),
-  inventory: new Inventory([
-    equippedWeapon,
-    new ShortSword(3, 0),
-    new Dagger(0, 0),
-    new Ring(5, 5),
-  ]),
+  inventory: new Inventory([equippedWeapon, new ShortSword(3, 0), new Ring(5, 5)]),
   description: new Description(equippedWeapon),
   dragging: null,
 };
@@ -86,6 +82,9 @@ const drawEnemies = () => {
 const drawLoot = () => {
   window.game.droppedGold.forEach((g) => {
     g.draw();
+  });
+  window.game.droppedLoot.forEach((l) => {
+    l.draw();
   });
 };
 

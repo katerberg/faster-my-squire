@@ -1,10 +1,11 @@
 /* eslint-disable-next-line no-unused-vars */
 const SPRITE = {
   KNIGHT: { xStart: 0, xEnd: 15, yStart: 0, yEnd: 16 },
-  KNIGHT_ATTACKING: { xStart: 32, xEnd: 47, yStart: 0, yEnd: 16 },
+  KNIGHT_ATTACKING: { xStart: 32, xEnd: 46, yStart: 0, yEnd: 16 },
   GOBLIN: { xStart: 15, xEnd: 22, yStart: 0, yEnd: 16 },
   BACKGROUND: { xStart: 22, xEnd: 23, yStart: 0, yEnd: 16 },
   GOLD: { xStart: 23, xEnd: 32, yStart: 0, yEnd: 16 },
+  TREASURE: { xStart: 46, xEnd: 63, yStart: 0, yEnd: 16 },
 };
 
 /* eslint-disable-next-line no-unused-vars */
