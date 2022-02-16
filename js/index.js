@@ -18,6 +18,7 @@ window.game = {
     new Ring(5, 5),
   ]),
   description: new Description(equippedWeapon),
+  dragging: null,
 };
 
 window.images.spritesheet.src = 'assets/spritesheet.png';
@@ -102,6 +103,7 @@ const spawnEnemies = (time) => {
 
 const drawBackground = () => {
   const startingLine = window.game.player.x - RULES.PLAYER_STARTING_POSITION;
+  window.ctx.globalAlpha = 0.3;
   for (let i = 0; i < RULES.COMBAT_BAR_WIDTH; i++) {
     window.drawSprite(
       SPRITE.BACKGROUND,
@@ -110,6 +112,7 @@ const drawBackground = () => {
       Math.abs((Math.sin((startingLine + i) / 80) * (RULES.COMBAT_BAR_HEIGHT - 20)) / 2) + 20,
     );
   }
+  window.ctx.globalAlpha = 1.0;
 };
 
 const draw = (time) => {

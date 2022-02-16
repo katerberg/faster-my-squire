@@ -54,6 +54,13 @@ class Inventory {
       gearWidth,
       RULES.EQUIPMENT_PANEL_SIZE,
     );
+    window.ctx.font = '16px serif';
+    window.ctx.fillStyle = 'white';
+    window.ctx.fillText(
+      `Knight Health: ${window.game.player.hp}`,
+      window.canvas.width - gearWidth - RULES.EQUIPMENT_PANEL_PADDING_SIZE + 10,
+      yStart + 40,
+    );
   }
 
   drawGear(exclusionList) {
@@ -157,7 +164,8 @@ class Inventory {
     }
   }
 
-  draw(exclusionList = []) {
+  draw() {
+    const exclusionList = window.game.dragging ? [window.game.dragging.item] : [];
     const { xStart, yStart, yEnd } = window.getDraggableBoundary();
     window.ctx.clearRect(
       xStart,

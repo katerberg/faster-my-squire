@@ -1,5 +1,3 @@
-let dragging = null;
-
 window.setupCanvas = () => {
   window.canvas = document.querySelector('canvas');
   window.ctx = window.canvas.getContext('2d');
@@ -32,7 +30,7 @@ const handleMouseDown = (e) => {
     if (!item) {
       return;
     }
-    dragging = {
+    window.game.dragging = {
       item,
       offsetX:
         e.layerX - RULES.INVENTORY_PADDING_SIZE - item.xPosition * RULES.INVENTORY_CELL_WIDTH,
@@ -60,7 +58,7 @@ const handleMouseDown = (e) => {
       const offsetY = calculatedY > itemHeight || calculatedY < 0 ? itemHeight / 2 : calculatedY;
       const offsetX = calculatedX > itemWidth || calculatedX < 0 ? itemWidth / 2 : calculatedX;
 
-      dragging = {
+      window.game.dragging = {
         item,
         offsetX,
         offsetY,
@@ -102,49 +100,63 @@ const handleMouseMove = (e) => {
 
 const handleMouseDrag = (e) => {
   const itemStartEvent = getEventFromCoordinates(
-    e.layerX - dragging.offsetX,
-    e.layerY - dragging.offsetY,
+    e.layerX - window.game.dragging.offsetX,
+    e.layerY - window.game.dragging.offsetY,
   );
-  if (isItemInsideInventory(itemStartEvent.layerX, itemStartEvent.layerY, dragging.item)) {
-    window.game.inventory.draw([dragging.item]);
+  if (
+    isItemInsideInventory(itemStartEvent.layerX, itemStartEvent.layerY, window.game.dragging.item)
+  ) {
+    window.game.inventory.draw();
     window.ctx.globalAlpha = 0.5;
-    const [xCell, yCell] = getCellIncorporatingOffset(e, dragging);
-    window.ctx.fillStyle = isValidPosition(xCell, yCell, dragging.item) ? 'green' : 'red';
+    const [xCell, yCell] = getCellIncorporatingOffset(e, window.game.dragging);
+    window.ctx.fillStyle = isValidPosition(xCell, yCell, window.game.dragging.item)
+      ? 'green'
+      : 'red';
     window.ctx.fillRect(
       xCell * RULES.INVENTORY_CELL_WIDTH + RULES.INVENTORY_PADDING_SIZE,
       yCell * RULES.INVENTORY_CELL_HEIGHT + RULES.INVENTORY_PADDING_SIZE + RULES.COMBAT_BAR_HEIGHT,
-      dragging.item.xSize * RULES.INVENTORY_CELL_WIDTH,
-      dragging.item.ySize * RULES.INVENTORY_CELL_HEIGHT,
+      window.game.dragging.item.xSize * RULES.INVENTORY_CELL_WIDTH,
+      window.game.dragging.item.ySize * RULES.INVENTORY_CELL_HEIGHT,
     );
 
-    dragging.item.draw(itemStartEvent.layerX, itemStartEvent.layerY);
+    window.game.dragging.item.draw(itemStartEvent.layerX, itemStartEvent.layerY);
     window.ctx.globalAlpha = 1;
-  } else if (isItemInsidePlayZone(itemStartEvent.layerX, itemStartEvent.layerY, dragging.item)) {
-    window.game.inventory.draw([dragging.item]);
+  } else if (
+    isItemInsidePlayZone(itemStartEvent.layerX, itemStartEvent.layerY, window.game.dragging.item)
+  ) {
+    window.game.inventory.draw();
     window.ctx.globalAlpha = 0.5;
 
-    dragging.item.draw(itemStartEvent.layerX, itemStartEvent.layerY);
+    window.game.dragging.item.draw(itemStartEvent.layerX, itemStartEvent.layerY);
 
     window.ctx.globalAlpha = 1;
   }
 };
 
 const handleMouseUp = (e) => {
-  if (dragging) {
-    const x = e.layerX - dragging.offsetX;
-    const y = e.layerY - dragging.offsetY;
-    if (isItemInsideInventory(x, y, dragging.item)) {
-      if (isValidPosition(...getCellIncorporatingOffset(e, dragging), dragging.item)) {
-        const [xCell, yCell] = getCellIncorporatingOffset(e, dragging);
-        dragging.item.unequip(xCell, yCell);
+  if (window.game.dragging) {
+    const x = e.layerX - window.game.dragging.offsetX;
+    const y = e.layerY - window.game.dragging.offsetY;
+    if (isItemInsideInventory(x, y, window.game.dragging.item)) {
+      if (
+        isValidPosition(
+          ...getCellIncorporatingOffset(e, window.game.dragging),
+          window.game.dragging.item,
+        )
+      ) {
+        const [xCell, yCell] = getCellIncorporatingOffset(e, window.game.dragging);
+        window.game.dragging.item.unequip(xCell, yCell);
       }
-    } else if (isItemInsidePlayZone(x, y, dragging.item)) {
-      const slot = getSlotFromCoordinates(x + dragging.offsetX, y + dragging.offsetY);
-      window.game.inventory.tryToEquipItem(dragging.item, slot);
+    } else if (isItemInsidePlayZone(x, y, window.game.dragging.item)) {
+      const slot = getSlotFromCoordinates(
+        x + window.game.dragging.offsetX,
+        y + window.game.dragging.offsetY,
+      );
+      window.game.inventory.tryToEquipItem(window.game.dragging.item, slot);
     }
 
+    window.game.dragging = null;
     window.game.inventory.draw();
-    dragging = null;
   }
   window.canvas.onmousemove = handleMouseMove;
 };

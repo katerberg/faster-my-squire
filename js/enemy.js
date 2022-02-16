@@ -21,9 +21,6 @@ class Enemy {
     if (newPosition <= window.game.player.x + RULES.PLAYER_WIDTH) {
       return;
     }
-    // window.game.enemies
-    //   .map((e) => [e.x, e.x + e.width])
-    //   .some((e) => newPosition >= e[0] && newPosition <= e[1])
     this.lastMove = time;
     this.x = newPosition;
   }
@@ -39,7 +36,7 @@ class Enemy {
     if (time - this.lastAttack < this.attackSpeed) {
       return;
     }
-    if (window.game.player.x < this.x - this.range) {
+    if (window.game.player.x + RULES.PLAYER_WIDTH < this.x - this.range) {
       return;
     }
     this.lastAttack = time;
@@ -53,7 +50,6 @@ class Enemy {
       this.x - playerDistanceTraveled,
       this.width,
       RULES.COMBAT_BAR_HEIGHT,
-      this.hp > 0 ? `${this.hp}` : 'X',
     );
   }
 }

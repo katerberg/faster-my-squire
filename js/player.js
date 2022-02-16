@@ -31,6 +31,7 @@ class Player {
 
   takeDamage(amount) {
     this.hp -= amount;
+    window.game.inventory.draw();
   }
 
   move(time) {
@@ -52,7 +53,6 @@ class Player {
       RULES.PLAYER_STARTING_POSITION,
       RULES.PLAYER_WIDTH,
       RULES.COMBAT_BAR_HEIGHT,
-      this.hp,
     );
   }
 }
