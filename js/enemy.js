@@ -1,10 +1,9 @@
-/* eslint-disable-next-line no-unused-vars */
 class Enemy {
-  constructor(x, width, hp, sprite, gold, attackDamage, attackSpeed, moveSpeed, range) {
+  constructor(x, hp, sprite, gold, attackDamage, attackSpeed, moveSpeed, range) {
     this.x = x;
     this.sprite = sprite;
     this.hp = hp;
-    this.width = width;
+    this.width = 5 * (sprite.xEnd - sprite.xStart - 1);
     this.range = range;
     this.lastAttack = 0;
     this.attackDamage = attackDamage;
@@ -29,7 +28,14 @@ class Enemy {
   takeDamage(amount) {
     this.hp -= amount;
     if (this.hp <= 0) {
-      window.game.enemies = window.game.enemies.filter((e) => e !== this);
+      this.die();
+    }
+  }
+
+  die() {
+    window.game.enemies = window.game.enemies.filter((e) => e !== this);
+    if (this.gold) {
+      window.game.droppedGold.push(new Gold(this.x, this.gold));
     }
   }
 
@@ -58,6 +64,7 @@ class Enemy {
 /* eslint-disable-next-line no-unused-vars */
 class Goblin extends Enemy {
   constructor(x) {
-    super(x, 30, 3, SPRITE.GOBLIN, 1, 1, 1000, 10, 1);
+    const gold = Math.random() > 0.5 ? 1 : 0;
+    super(x, 3, SPRITE.GOBLIN, gold, 1, 1000, 100, 1);
   }
 }

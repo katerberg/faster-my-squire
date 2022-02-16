@@ -9,7 +9,8 @@ window.images = {
 
 const equippedWeapon = new BroadSword(null, null, SLOTS.HAND_PRIMARY);
 window.game = {
-  enemies: [],
+  enemies: [new Goblin(190)],
+  droppedGold: [new Gold(300, 1)],
   player: new Player(10, SPRITE.KNIGHT),
   inventory: new Inventory([
     equippedWeapon,
@@ -82,6 +83,12 @@ const drawEnemies = () => {
   });
 };
 
+const drawLoot = () => {
+  window.game.droppedGold.forEach((g) => {
+    g.draw();
+  });
+};
+
 let lastSpawn = 0;
 
 const spawnEnemies = (time) => {
@@ -98,6 +105,7 @@ const spawnEnemies = (time) => {
 
 const drawBackground = () => {
   const startingLine = window.game.player.x - RULES.PLAYER_STARTING_POSITION;
+  window.ctx.imageSmoothingEnabled = true;
   window.ctx.globalAlpha = 0.3;
   for (let i = 0; i < RULES.COMBAT_BAR_WIDTH; i++) {
     window.drawSprite(
@@ -108,13 +116,15 @@ const drawBackground = () => {
     );
   }
   window.ctx.globalAlpha = 1.0;
+  window.ctx.imageSmoothingEnabled = false;
 };
 
-const draw = (time) => {
+const draw = () => {
   window.ctx.clearRect(0, 0, RULES.COMBAT_BAR_WIDTH, RULES.COMBAT_BAR_HEIGHT);
   drawBackground();
-  window.game.player.draw(time);
-  drawEnemies(time);
+  window.game.player.draw();
+  drawEnemies();
+  drawLoot();
 };
 
 const move = (time) => {
@@ -123,7 +133,7 @@ const move = (time) => {
 };
 
 const gameLoop = (timeStamp) => {
-  draw(timeStamp);
+  draw();
   move(timeStamp);
   fight(timeStamp);
   spawnEnemies(timeStamp);

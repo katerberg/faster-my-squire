@@ -1,4 +1,3 @@
-/* eslint-disable-next-line no-unused-vars */
 class Item {
   constructor(name, xSize, ySize, xPosition, yPosition, sprite, slot) {
     this.name = name;

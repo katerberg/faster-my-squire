@@ -105,7 +105,7 @@ module.exports = {
   globals: {
     document: 'readonly',
     window: 'readonly',
-    Enemy: 'readonly',
+    Gold: 'readonly',
     Goblin: 'readonly',
     Description: 'readonly',
     Player: 'readonly',

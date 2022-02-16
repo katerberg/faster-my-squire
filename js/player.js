@@ -5,19 +5,21 @@ class Player {
     this.hp = hp;
     this.sprite = sprite;
     this.width = RULES.PLAYER_WIDTH;
-    this.range = this.width + 1;
+    this.attackRange = this.width + 1;
+    this.lootRange = this.width;
     this.lastAttack = 0;
     this.attackDamage = 1;
     this.attackSpeed = 1000;
     this.lastMove = 0;
-    this.moveSpeed = 100;
+    this.moveSpeed = 10;
+    this.gold = 0;
   }
 
   attack(time) {
     if (time - this.lastAttack < this.attackSpeed) {
       return;
     }
-    const closestEnemy = window.game.enemies.find((e) => e.x <= this.x + this.range);
+    const closestEnemy = window.game.enemies.find((e) => e.x <= this.x + this.attackRange);
     if (!closestEnemy) {
       return;
     }
@@ -34,6 +36,13 @@ class Player {
     window.game.inventory.draw();
   }
 
+  loot(x) {
+    const goldAtLocation = window.game.droppedGold.filter((g) => g.x === x);
+    window.game.droppedGold = window.game.droppedGold.filter((g) => g.x !== x);
+    this.gold += goldAtLocation.reduce((prev, current) => prev + current.gold, 0);
+    window.game.inventory.draw();
+  }
+
   move(time) {
     if (time - this.lastMove < this.moveSpeed) {
       return;
@@ -43,6 +52,7 @@ class Player {
       return;
     }
 
+    this.loot(newPosition + this.lootRange);
     this.lastMove = time;
     this.x = newPosition;
   }
