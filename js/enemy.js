@@ -5,23 +5,26 @@ class Enemy {
     this.sprite = sprite;
     this.hp = hp;
     this.width = width;
-    this.speed = 10;
-    this.attackDamage = 1;
     this.range = 11;
+    this.lastAttack = 0;
+    this.attackDamage = 1;
+    this.attackSpeed = 1000;
+    this.lastMove = 0;
+    this.moveSpeed = 1000;
   }
 
-  move(overrideSpeed) {
-    const speed = overrideSpeed ? overrideSpeed : this.speed;
-    const newPosition = this.x - speed;
-    if (newPosition <= window.game.player.x + RULES.PLAYER_WIDTH && speed > 1) {
-      return this.move(speed - 1);
-    } else if (
-      window.game.enemies
-        .map((e) => [e.x, e.x + e.width])
-        .some((e) => newPosition >= e[0] && newPosition <= e[1])
-    ) {
+  move(time) {
+    if (time - this.lastMove < this.moveSpeed) {
       return;
     }
+    const newPosition = this.x - 1;
+    if (newPosition <= window.game.player.x + RULES.PLAYER_WIDTH) {
+      return;
+    }
+    // window.game.enemies
+    //   .map((e) => [e.x, e.x + e.width])
+    //   .some((e) => newPosition >= e[0] && newPosition <= e[1])
+    this.lastMove = time;
     this.x = newPosition;
   }
 
@@ -32,13 +35,25 @@ class Enemy {
     }
   }
 
-  attack() {
-    if (window.game.player.x >= this.x - this.range) {
-      window.game.player.takeDamage(this.attackDamage);
+  attack(time) {
+    if (time - this.lastAttack < this.attackSpeed) {
+      return;
     }
+    if (window.game.player.x < this.x - this.range) {
+      return;
+    }
+    this.lastAttack = time;
+    window.game.player.takeDamage(this.attackDamage);
   }
 
   draw() {
-    window.drawSprite(this.sprite, this.x, this.width, this.hp > 0 ? `${this.hp}` : 'X');
+    const playerDistanceTraveled = window.game.player.x - RULES.PLAYER_STARTING_POSITION;
+    window.drawSprite(
+      this.sprite,
+      this.x - playerDistanceTraveled,
+      this.width,
+      RULES.COMBAT_BAR_HEIGHT,
+      this.hp > 0 ? `${this.hp}` : 'X',
+    );
   }
 }

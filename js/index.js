@@ -9,7 +9,7 @@ window.images = {
 
 const equippedWeapon = new BroadSword(null, null, SLOTS.HAND_PRIMARY);
 window.game = {
-  enemies: [new Enemy(70, 10, 3, SPRITE.ENEMY)],
+  enemies: [new Enemy(90, 30, 3, SPRITE.ENEMY)],
   player: new Player(10, SPRITE.KNIGHT),
   inventory: new Inventory([
     equippedWeapon,
@@ -41,7 +41,7 @@ window.getDraggableBoundary = () => ({
     RULES.COMBAT_BAR_HEIGHT + RULES.EQUIPMENT_PANEL_PADDING_SIZE * 2 + RULES.EQUIPMENT_PANEL_SIZE,
 });
 
-window.drawSprite = (sprite, x, width, textOverlay) => {
+window.drawSprite = (sprite, x, width, height, textOverlay) => {
   window.ctx.drawImage(
     window.images.spritesheet,
     sprite * 16,
@@ -49,9 +49,9 @@ window.drawSprite = (sprite, x, width, textOverlay) => {
     16,
     16,
     x,
-    0,
+    RULES.COMBAT_BAR_HEIGHT - height,
     width,
-    RULES.COMBAT_BAR_HEIGHT,
+    height,
   );
   if (textOverlay !== undefined) {
     window.ctx.font = '10px serif';
@@ -60,24 +60,18 @@ window.drawSprite = (sprite, x, width, textOverlay) => {
   }
 };
 
-const fightEnemies = () => {
-  window.game.player.attack();
+const fight = (time) => {
+  window.game.player.attack(time);
   window.game.enemies.forEach((e) => {
-    e.attack();
+    e.attack(time);
   });
 };
 
-const checkGameEnd = () => {
-  if (window.game.player.hp <= 0) {
-    clearInterval(drawInterval);
-    clearInterval(battleInterval);
-    window.game.player.draw();
-  }
-};
+const checkGameEnd = () => window.game.player.hp <= 0;
 
-const moveEnemies = () => {
+const moveEnemies = (time) => {
   window.game.enemies.forEach((e) => {
-    e.move();
+    e.move(time);
   });
 };
 
@@ -87,37 +81,56 @@ const drawEnemies = () => {
   });
 };
 
-const spawnEnemy = () => {
+let lastSpawn = 0;
+
+const spawnEnemies = (time) => {
+  if (time - lastSpawn < RULES.ENEMY_SPAWN_TIMER) {
+    return;
+  }
   if (window.game.enemies.length < RULES.ENEMY_LIMIT) {
-    window.game.enemies.push(new Enemy(RULES.COMBAT_BAR_WIDTH - 1, 10, 3, SPRITE.ENEMY));
+    lastSpawn = time;
+    window.game.enemies.push(new Enemy(RULES.COMBAT_BAR_WIDTH - 1, 30, 3, SPRITE.ENEMY));
   }
 };
 
 const drawBackground = () => {
+  const startingLine = window.game.player.x - RULES.PLAYER_STARTING_POSITION;
   for (let i = 0; i < RULES.COMBAT_BAR_WIDTH; i++) {
-    window.drawSprite(SPRITE.BACKGROUND, i, 1);
+    window.drawSprite(
+      SPRITE.BACKGROUND,
+      i,
+      1,
+      Math.abs((Math.sin((startingLine + i) / 80) * (RULES.COMBAT_BAR_HEIGHT - 20)) / 2) + 20,
+    );
   }
 };
 
-let timer = 0;
-const battleTick = () => {
-  timer++;
-  fightEnemies();
-  checkGameEnd();
-  moveEnemies();
-  if (timer % 100 === 0) {
-    spawnEnemy();
-  }
-};
-
-const draw = () => {
+const draw = (time) => {
   window.ctx.clearRect(0, 0, RULES.COMBAT_BAR_WIDTH, RULES.COMBAT_BAR_HEIGHT);
   drawBackground();
-  window.game.player.draw();
-  drawEnemies();
+  window.game.player.draw(time);
+  drawEnemies(time);
+};
+
+const move = (time) => {
+  window.game.player.move(time);
+  moveEnemies(time);
+};
+
+const gameLoop = (timeStamp) => {
+  draw(timeStamp);
+  move(timeStamp);
+  fight(timeStamp);
+  spawnEnemies(timeStamp);
+
+  if (checkGameEnd()) {
+    window.game.player.draw();
+    return;
+  }
+
+  window.requestAnimationFrame(gameLoop);
 };
 
 window.setupCanvas();
 
-const battleInterval = setInterval(battleTick, 10);
-const drawInterval = setInterval(draw, 15);
+gameLoop(0);

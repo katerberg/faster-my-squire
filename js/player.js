@@ -1,19 +1,27 @@
 /* eslint-disable-next-line no-unused-vars */
 class Player {
   constructor(hp, sprite) {
-    this.x = 50;
+    this.x = RULES.PLAYER_STARTING_POSITION;
     this.hp = hp;
     this.sprite = sprite;
-    this.attackDamage = 1;
     this.range = 11;
     this.width = 10;
+    this.lastAttack = 0;
+    this.attackDamage = 1;
+    this.attackSpeed = 1000;
+    this.lastMove = 0;
+    this.moveSpeed = 100;
   }
 
-  attack() {
+  attack(time) {
+    if (time - this.lastAttack < this.attackSpeed) {
+      return;
+    }
     const closestEnemy = window.game.enemies.find((e) => e.x <= this.x + this.range);
     if (!closestEnemy) {
       return;
     }
+    this.lastAttack = time;
     const equippedWeapon = window.game.inventory.getItemFromSlot(SLOTS.HAND_PRIMARY);
     if (equippedWeapon) {
       return closestEnemy.takeDamage(equippedWeapon.attack());
@@ -25,7 +33,26 @@ class Player {
     this.hp -= amount;
   }
 
+  move(time) {
+    if (time - this.lastMove < this.moveSpeed) {
+      return;
+    }
+    const newPosition = this.x + 1;
+    if (window.game.enemies.some((e) => e.x <= newPosition + this.width)) {
+      return;
+    }
+
+    this.lastMove = time;
+    this.x = newPosition;
+  }
+
   draw() {
-    window.drawSprite(SPRITE.KNIGHT, this.x, 10, this.hp);
+    window.drawSprite(
+      SPRITE.KNIGHT,
+      RULES.PLAYER_STARTING_POSITION,
+      10,
+      RULES.COMBAT_BAR_HEIGHT,
+      this.hp,
+    );
   }
 }
