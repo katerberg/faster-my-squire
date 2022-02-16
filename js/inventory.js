@@ -122,11 +122,8 @@ class Inventory {
       });
   }
 
-  getInventoryLineColor(index, max, orientation) {
+  getInventoryLineColor(index, max) {
     if (index === max || index === 0) {
-      return 'black';
-    }
-    if (index === max - 2 && orientation == 'vertical') {
       return 'black';
     }
     return 'grey';
@@ -154,28 +151,11 @@ class Inventory {
     );
   }
 
-  drawInventoryPickupZone() {
-    window.ctx.fillStyle = '#7cc5be';
-    window.ctx.fillRect(
-      RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * (RULES.INVENTORY_WIDTH - 2),
-      RULES.INVENTORY_PADDING_SIZE + RULES.COMBAT_BAR_HEIGHT,
-      RULES.INVENTORY_CELL_WIDTH * 2,
-      RULES.INVENTORY_CELL_HEIGHT * 3,
-    );
-    window.ctx.font = '16px serif';
-    window.ctx.fillStyle = 'black';
-    window.ctx.fillText(
-      'Pick-up Zone',
-      RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * (RULES.INVENTORY_WIDTH - 2),
-      RULES.INVENTORY_PADDING_SIZE + RULES.COMBAT_BAR_HEIGHT - 4,
-    );
-  }
-
   drawInventoryHorizontalLines() {
     for (let i = 0; i <= RULES.INVENTORY_HEIGHT; i++) {
       const yPosition =
         RULES.INVENTORY_CELL_HEIGHT * i + RULES.INVENTORY_PADDING_SIZE + RULES.COMBAT_BAR_HEIGHT;
-      window.ctx.strokeStyle = this.getInventoryLineColor(i, RULES.INVENTORY_HEIGHT, 'horizontal');
+      window.ctx.strokeStyle = this.getInventoryLineColor(i, RULES.INVENTORY_HEIGHT);
       window.ctx.beginPath();
       window.ctx.moveTo(RULES.INVENTORY_PADDING_SIZE, yPosition);
       window.ctx.lineTo(
@@ -211,6 +191,19 @@ class Inventory {
       );
       window.ctx.stroke();
     }
+    window.ctx.strokeStyle = 'black';
+    window.ctx.beginPath();
+    window.ctx.moveTo(
+      RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * (RULES.INVENTORY_WIDTH - 2),
+      RULES.INVENTORY_CELL_HEIGHT * 3 + RULES.INVENTORY_PADDING_SIZE + RULES.COMBAT_BAR_HEIGHT,
+    );
+    window.ctx.lineTo(
+      RULES.INVENTORY_PADDING_SIZE + RULES.INVENTORY_CELL_WIDTH * (RULES.INVENTORY_WIDTH - 2),
+      RULES.INVENTORY_CELL_HEIGHT * RULES.INVENTORY_HEIGHT +
+        RULES.INVENTORY_PADDING_SIZE +
+        RULES.COMBAT_BAR_HEIGHT,
+    );
+    window.ctx.stroke();
   }
 
   draw() {
@@ -224,7 +217,6 @@ class Inventory {
     );
     window.ctx.lineWidth = 1;
     this.drawInventoryDropZone();
-    this.drawInventoryPickupZone();
     this.drawInventoryHorizontalLines();
     this.drawInventoryVerticalLines();
     this.getUnequippedItems().forEach((i) => exclusionList.includes(i) || i.draw());

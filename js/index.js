@@ -12,7 +12,7 @@ const equippedWeapon = new Dagger(null, null, SLOTS.HAND_PRIMARY);
 window.game = {
   enemies: [new Goblin(190)],
   droppedGold: [new Gold(640, 1)],
-  droppedLoot: [new Treasure(340, [])],
+  droppedLoot: [],
   player: new Player(10, SPRITE.KNIGHT),
   inventory: new Inventory([equippedWeapon, new Longbow(0, 0)]),
   description: new Description(equippedWeapon),
