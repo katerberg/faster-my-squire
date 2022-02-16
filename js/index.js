@@ -9,7 +9,7 @@ window.images = {
 
 const equippedWeapon = new BroadSword(null, null, SLOTS.HAND_PRIMARY);
 window.game = {
-  enemies: [new Enemy(90, 30, 3, SPRITE.ENEMY)],
+  enemies: [],
   player: new Player(10, SPRITE.KNIGHT),
   inventory: new Inventory([
     equippedWeapon,
@@ -44,10 +44,10 @@ window.getDraggableBoundary = () => ({
 window.drawSprite = (sprite, x, width, height, textOverlay) => {
   window.ctx.drawImage(
     window.images.spritesheet,
-    sprite * 16,
-    0,
-    16,
-    16,
+    sprite.xStart,
+    sprite.yStart,
+    sprite.xEnd - sprite.xStart,
+    sprite.yEnd - sprite.yStart,
     x,
     RULES.COMBAT_BAR_HEIGHT - height,
     width,
@@ -89,7 +89,14 @@ const spawnEnemies = (time) => {
   }
   if (window.game.enemies.length < RULES.ENEMY_LIMIT) {
     lastSpawn = time;
-    window.game.enemies.push(new Enemy(RULES.COMBAT_BAR_WIDTH - 1, 30, 3, SPRITE.ENEMY));
+    window.game.enemies.push(
+      new Enemy(
+        window.game.player.x + RULES.COMBAT_BAR_WIDTH - RULES.PLAYER_STARTING_POSITION,
+        30,
+        3,
+        SPRITE.ENEMY,
+      ),
+    );
   }
 };
 
