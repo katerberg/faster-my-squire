@@ -26,9 +26,27 @@ class Inventory {
     );
   }
 
-  isValidPosition(xCell, yCell, item = null) {
+  isCellInDropZone(xCell, yCell) {
+    return xCell > RULES.INVENTORY_WIDTH - 3 && yCell > RULES.INVENTORY_HEIGHT - 4;
+  }
+
+  isInDropZone(xCell, yCell, item) {
     for (let i = xCell; i < xCell + item.xSize; i++) {
       for (let j = yCell; j < yCell + item.ySize; j++) {
+        if (!this.isCellInDropZone(i, j)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  isValidPosition(xCell, yCell, item = null) {
+    for (let i = xCell; i < xCell + (item ? item.xSize : 0); i++) {
+      for (let j = yCell; j < yCell + (item ? item.ySize : 0); j++) {
+        if (this.isCellInDropZone(i, j)) {
+          return false;
+        }
         const itemAtSpot = this.getItemFromCell(i, j);
         if (itemAtSpot && itemAtSpot !== item) {
           return false;
@@ -63,6 +81,11 @@ class Inventory {
       return;
     }
     this.equipItem(item, slot);
+  }
+
+  dropItem(item) {
+    this.items = this.items.filter((i) => i !== item);
+    window.game.droppedLoot.push(new Treasure(window.game.player.x, [item]));
   }
 
   equipItem(item, slot) {

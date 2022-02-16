@@ -90,6 +90,9 @@ class Goblin extends Enemy {
     if (seed > 0.55) {
       return [new Dagger()];
     }
+    if (seed > 0.5) {
+      return [new Longbow()];
+    }
     return [];
   }
 }

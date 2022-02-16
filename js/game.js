@@ -139,14 +139,12 @@ const handleMouseUp = (e) => {
     const x = e.layerX - window.game.dragging.offsetX;
     const y = e.layerY - window.game.dragging.offsetY;
     if (isItemInsideInventory(x, y, window.game.dragging.item)) {
-      if (
-        window.game.inventory.isValidPosition(
-          ...getCellIncorporatingOffset(e, window.game.dragging),
-          window.game.dragging.item,
-        )
-      ) {
+      const cell = getCellIncorporatingOffset(e, window.game.dragging);
+      if (window.game.inventory.isValidPosition(...cell, window.game.dragging.item)) {
         const [xCell, yCell] = getCellIncorporatingOffset(e, window.game.dragging);
         window.game.dragging.item.unequip(xCell, yCell);
+      } else if (window.game.inventory.isInDropZone(...cell, window.game.dragging.item)) {
+        window.game.inventory.dropItem(window.game.dragging.item);
       }
     } else if (isItemInsidePlayZone(x, y, window.game.dragging.item)) {
       const slot = getSlotFromCoordinates(
