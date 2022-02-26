@@ -5,7 +5,8 @@ const SPRITE = {
   GOBLIN: { xStart: 15, xEnd: 22, yStart: 0, yEnd: 16 },
   BACKGROUND: { xStart: 22, xEnd: 23, yStart: 0, yEnd: 16 },
   GOLD: { xStart: 23, xEnd: 32, yStart: 0, yEnd: 16 },
-  TREASURE: { xStart: 46, xEnd: 63, yStart: 0, yEnd: 16 },
+  TREASURE: { xStart: 46, xEnd: 53, yStart: 0, yEnd: 16 },
+  BIRD: { xStart: 53, xEnd: 62, yStart: 0, yEnd: 16 },
 };
 
 /* eslint-disable-next-line no-unused-vars */
@@ -28,6 +29,25 @@ const RULES = {
   ITEM_DESCRIPTION_HEIGHT: 200,
   ITEM_DESCRIPTION_PADDING: 20,
   HISTOGRAM_MAX_BARS: 16,
+};
+
+/* eslint-disable-next-line no-unused-vars */
+const ZONES = {
+  COUNTRYSIDE: {
+    xEnd: 10000,
+    getEnemy: () => {
+      if (Math.random() > 0.8) {
+        return Bird;
+      }
+      return Goblin;
+    },
+  },
+  KINGS_FOREST: { xEnd: 20000, getEnemy: () => Goblin },
+  LOWLANDS: { xEnd: 30000, getEnemy: () => Goblin },
+  MOUNTAIN: { xEnd: 40000, getEnemy: () => Goblin },
+  FARMLAND: { xEnd: 50000, getEnemy: () => Goblin },
+  PRINCES_CASTLE: { xEnd: 60000, getEnemy: () => Goblin },
+  FINAL_BATTLE: { xEnd: 70000, getEnemy: () => Goblin },
 };
 
 /* eslint-disable-next-line no-unused-vars */

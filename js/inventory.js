@@ -133,6 +133,13 @@ class Inventory {
       window.canvas.width - gearWidth - RULES.EQUIPMENT_PANEL_PADDING_SIZE + 200,
       yStart + 40,
     );
+
+    window.ctx.fillStyle = 'gold';
+    window.ctx.fillText(
+      `X: ${window.game.player.x}`,
+      window.canvas.width - gearWidth - RULES.EQUIPMENT_PANEL_PADDING_SIZE + 300,
+      yStart + 40,
+    );
   }
 
   drawGear(exclusionList) {

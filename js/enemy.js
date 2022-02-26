@@ -73,7 +73,7 @@ class Enemy {
 class Goblin extends Enemy {
   constructor(x) {
     const gold = Math.random() > 0.5 ? 1 : 0;
-    super(x, 3, SPRITE.GOBLIN, gold, 1, 1000, 100, 1);
+    super(x, 3, SPRITE.GOBLIN, gold, 1, 1000, 1000, 1);
   }
 
   getRandomLoot() {
@@ -92,6 +92,21 @@ class Goblin extends Enemy {
     }
     if (seed > 0.5) {
       return [new Longbow()];
+    }
+    return [];
+  }
+}
+
+/* eslint-disable-next-line no-unused-vars */
+class Bird extends Enemy {
+  constructor(x) {
+    super(x, 1, SPRITE.BIRD, 0, 1, 1000, 5, 1);
+  }
+
+  getRandomLoot() {
+    const seed = Math.random();
+    if (seed > 0.8) {
+      return [new Ring()];
     }
     return [];
   }

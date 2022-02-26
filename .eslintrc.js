@@ -108,6 +108,7 @@ module.exports = {
     Gold: 'readonly',
     Treasure: 'readonly',
     Goblin: 'readonly',
+    Bird: 'readonly',
     Description: 'readonly',
     Player: 'readonly',
     Dagger: 'readonly',
@@ -121,6 +122,7 @@ module.exports = {
     RULES: 'readonly',
     SPRITE: 'readonly',
     SLOTS: 'readonly',
+    ZONES: 'readonly',
   },
   env: {
     browser: true,

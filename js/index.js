@@ -98,9 +98,12 @@ const spawnEnemies = (time) => {
   }
   if (window.game.enemies.length < RULES.ENEMY_LIMIT) {
     lastSpawn = time;
-    window.game.enemies.push(
-      new Goblin(window.game.player.x + RULES.COMBAT_BAR_WIDTH - RULES.PLAYER_STARTING_POSITION),
-    );
+    const spawnLocation =
+      window.game.player.x + RULES.COMBAT_BAR_WIDTH - RULES.PLAYER_STARTING_POSITION;
+
+    const zone = Object.keys(ZONES).find((z) => spawnLocation < ZONES[z].xEnd);
+
+    window.game.enemies.push(new (ZONES[zone].getEnemy())(spawnLocation));
   }
 };
 

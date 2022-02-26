@@ -32,6 +32,6 @@ class Gold extends Loot {
 class Treasure extends Loot {
   constructor(x, items) {
     super(x, SPRITE.TREASURE, 0, items);
-    this.width = 70;
+    this.width = 30;
   }
 }
