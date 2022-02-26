@@ -100,7 +100,7 @@ class ShortSword extends Item {
   }
 
   generateDamage() {
-    return Math.ceil(Math.random() * 4);
+    return Math.ceil(Math.random() * 6);
   }
 
   getValidSlots() {
